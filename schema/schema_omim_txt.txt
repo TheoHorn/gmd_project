@@ -1,0 +1,10 @@
+schema : 
+RECORD
+    - NO : numero
+    - TI : numero + disease name
+    - TX : Description + clinial features + inheritance
+    - RF : references
+    - CS : clinical synopsis (clinical features like symptoms, signs, etc)
+    - CN : clinical notes
+    - CD : clinical diagnosis
+    - ED : editors
