@@ -2,7 +2,7 @@ module telecom.projet {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
-    requires lucene.analyzers.common;
+    //requires lucene.analyzers.common;
     requires lucene.core;
     requires lucene.queryparser;
     requires lucene.queries;
