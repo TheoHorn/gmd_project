@@ -62,9 +62,8 @@ public class DrugbankIndexer {
 
                 StringBuilder data = new StringBuilder();
 
-                String id,name,toxicity,indication,state;
+                String id,name,toxicity,indication,state,atc_code;
 
-                ArrayList<String> atc_codes = new ArrayList<String>();
 
                 boolean inDrug, isPrimary = false;
 
@@ -79,7 +78,7 @@ public class DrugbankIndexer {
                         }
                     }else if (qName.equalsIgnoreCase("atc-code")) {
                         String code = attributes.getValue("code");
-                        atc_codes.add(code);
+                        atc_code = code;
                     }
                     else if (qName.equalsIgnoreCase("products")){
                         inDrug = false;
@@ -110,14 +109,11 @@ public class DrugbankIndexer {
                         Document luceneDoc = new Document();
                         // Add fields to the document
                         luceneDoc.add(new StringField("id",id , Field.Store.YES));
-                        luceneDoc.add(new StringField("name", name, Field.Store.YES));
+                        luceneDoc.add(new TextField("name", name, Field.Store.YES));
                         luceneDoc.add(new TextField("indication", indication, Field.Store.NO));
                         luceneDoc.add(new TextField("toxicity", toxicity, Field.Store.NO));
                         luceneDoc.add(new TextField("state", state, Field.Store.NO));
-
-                        for (String atc_code : atc_codes) {
-                            luceneDoc.add(new StringField("atc_code", atc_code, Field.Store.YES));
-                        }
+                        luceneDoc.add(new StringField("atc_code", atc_code, Field.Store.NO));
 
                         try {
                             //System.out.println("Indexing document ...");
@@ -138,8 +134,8 @@ public class DrugbankIndexer {
                             indication = data.toString();
                         } else if (qName.equalsIgnoreCase("state")) {
                             state = data.toString();
-                        }else if (qName.equalsIgnoreCase("atc-code")) {
-                            atc_codes.clear();
+                        }else if (qName.equalsIgnoreCase("atc-codes")) {
+                            atc_code = "";
                         }
                         data.setLength(0);
                     }

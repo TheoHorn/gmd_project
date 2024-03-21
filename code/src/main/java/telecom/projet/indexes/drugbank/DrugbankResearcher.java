@@ -55,6 +55,6 @@ public class DrugbankResearcher {
     }
 
     public static void main(String[] args) throws IOException {
-        searchingIndex("indication", "heparin induced thrombocytopenia");
+        searchingIndex("atc_code", "A16AX02");
     }
 }
