@@ -114,6 +114,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-#Data to not commit
+#Intelij IDE
+.idea/*
 
+#Data to not commit
+indexes/*
 data/*
