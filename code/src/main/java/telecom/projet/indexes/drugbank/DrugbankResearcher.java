@@ -6,14 +6,23 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.SimpleFSDirectory;
+import telecom.projet.model.Drug;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 
 public class DrugbankResearcher {
 
-    public static void searchingIndex(String field_to_research, String query) throws IOException {
+    /**
+     * Search the index for a specific field and query
+     * @param field_to_research, the field to search in the index
+     * @param query, the query to search in the index
+     * @return an ArrayList of the drugs found
+     * @throws IOException if there is an error while reading the index
+     */
+    public static ArrayList<Drug> searchingIndex(String field_to_research, String query) throws IOException {
         String index_directory = "indexes/drugbank";
         SimpleFSDirectory directory = new SimpleFSDirectory(Path.of(index_directory));
         IndexReader reader = DirectoryReader.open(directory);
@@ -42,13 +51,21 @@ public class DrugbankResearcher {
 
         System.out.println("Total hits: " + topDocs.totalHits);
 
+        ArrayList<Drug> drugs = new ArrayList<>();
         for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
             Document doc = searcher.doc(scoreDoc.doc);
-            System.out.println("Name: " + doc.get("name")+ "\nID: " + doc.get("id") + "\nATC code: " + doc.get("atc_code"));
+            String name = doc.get("name");
+            String dbk_id = doc.get("id");
+            String atc_code = doc.get("atc_code");
+            drugs.add(new Drug(name, atc_code, dbk_id));
         }
+        return drugs;
     }
 
     public static void main(String[] args) throws IOException {
-        searchingIndex("indication", "compensated liver disease");
+        ArrayList<Drug> drugs = searchingIndex("indication", "compensated liver Drug");
+        for (Drug Drug : drugs) {
+            System.out.println(Drug.getName()+" "+Drug.getAtc_code()+" "+Drug.getDrugbank_id());
+        }
     }
 }

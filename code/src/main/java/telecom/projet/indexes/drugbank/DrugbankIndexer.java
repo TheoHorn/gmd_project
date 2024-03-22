@@ -16,8 +16,12 @@ import org.xml.sax.helpers.*;
 import javax.xml.parsers.*;
 public class DrugbankIndexer {
 
+    // Index directory
     public static Directory index_directory;
 
+    /**
+     * Run the indexing of the drugbank.xml file
+     */
     public static void runIndexing(){
         try {
             index_directory = new SimpleFSDirectory(Path.of("indexes/drugbank"));
