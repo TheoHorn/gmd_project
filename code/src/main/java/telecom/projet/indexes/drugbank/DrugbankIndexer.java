@@ -10,7 +10,6 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.*;
 import org.apache.lucene.store.*;
-import org.apache.lucene.util.*;
 import org.apache.lucene.document.*;
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
@@ -62,8 +61,12 @@ public class DrugbankIndexer {
 
                 StringBuilder data = new StringBuilder();
 
-                String id,name,toxicity,indication,state,atc_code;
+                String id,name,toxicity,indication,state,pharmacodynamics;
 
+                TextField nameField, toxicityField, indicationField, stateField, pharmacodynamicsField;
+                StringField idField;
+
+                ArrayList<String> atc_codes = new ArrayList<String>();
 
                 boolean inDrug, isPrimary = false;
 
@@ -78,7 +81,7 @@ public class DrugbankIndexer {
                         }
                     }else if (qName.equalsIgnoreCase("atc-code")) {
                         String code = attributes.getValue("code");
-                        atc_code = code;
+                        atc_codes.add(code);
                     }
                     else if (qName.equalsIgnoreCase("products")){
                         inDrug = false;
@@ -106,22 +109,28 @@ public class DrugbankIndexer {
                 }
                 public void endElement(String uri, String localName, String qName) throws SAXException {
                     if (qName.equalsIgnoreCase("drug")) {
-                        Document luceneDoc = new Document();
-                        // Add fields to the document
-                        luceneDoc.add(new StringField("id",id , Field.Store.YES));
-                        luceneDoc.add(new TextField("name", name, Field.Store.YES));
-                        luceneDoc.add(new TextField("indication", indication, Field.Store.NO));
-                        luceneDoc.add(new TextField("toxicity", toxicity, Field.Store.NO));
-                        luceneDoc.add(new TextField("state", state, Field.Store.NO));
-                        luceneDoc.add(new StringField("atc_code", atc_code, Field.Store.NO));
-
-                        try {
-                            //System.out.println("Indexing document ...");
-                            writer.addDocument(luceneDoc);
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        idField = new StringField("id", id, Field.Store.YES);
+                        nameField = new TextField("name", name, Field.Store.YES);
+                        toxicityField = new TextField("toxicity", toxicity, Field.Store.NO);
+                        indicationField = new TextField("indication", indication, Field.Store.NO);
+                        stateField = new TextField("state", state, Field.Store.NO);
+                        pharmacodynamicsField = new TextField("pharmacodynamics", pharmacodynamics, Field.Store.NO);
+                        for (String atc_code : atc_codes) {
+                            Document luceneDoc = new Document();
+                            luceneDoc.add(idField);
+                            luceneDoc.add(nameField);
+                            luceneDoc.add(toxicityField);
+                            luceneDoc.add(indicationField);
+                            luceneDoc.add(stateField);
+                            luceneDoc.add(pharmacodynamicsField);
+                            luceneDoc.add(new StringField("atc_code", atc_code, Field.Store.YES));
+                            try {
+                                writer.addDocument(luceneDoc);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                         }
-
+                        atc_codes.clear();
                     } else if (inDrug) {
                         if (qName.equalsIgnoreCase("name")) {
                             name = data.toString();
@@ -134,8 +143,8 @@ public class DrugbankIndexer {
                             indication = data.toString();
                         } else if (qName.equalsIgnoreCase("state")) {
                             state = data.toString();
-                        }else if (qName.equalsIgnoreCase("atc-codes")) {
-                            atc_code = "";
+                        }else if (qName.equalsIgnoreCase("pharmacodynamics")) {
+                            pharmacodynamics = data.toString();
                         }
                         data.setLength(0);
                     }
