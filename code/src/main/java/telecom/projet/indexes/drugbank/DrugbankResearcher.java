@@ -56,8 +56,13 @@ public class DrugbankResearcher {
             Document doc = searcher.doc(scoreDoc.doc);
             String name = doc.get("name");
             String dbk_id = doc.get("id");
-            String atc_code = doc.get("atc_code");
-            drugs.add(new Drug(name, atc_code, dbk_id));
+            String database_code = doc.get("atc_code");
+            Drug drug = new Drug();
+            drug.setName(name);
+            drug.setDatabase_code(database_code);
+            drug.setDrugbank_id(dbk_id);
+            drug.setDatabase("ATC");
+            drugs.add(drug);
         }
         return drugs;
     }
@@ -65,7 +70,7 @@ public class DrugbankResearcher {
     public static void main(String[] args) throws IOException {
         ArrayList<Drug> drugs = searchingIndex("indication", "compensated liver Drug");
         for (Drug Drug : drugs) {
-            System.out.println(Drug.getName()+" "+Drug.getAtc_code()+" "+Drug.getDrugbank_id());
+            System.out.println(Drug.getName()+" "+Drug.getDatabase_code()+" "+Drug.getDrugbank_id());
         }
     }
 }

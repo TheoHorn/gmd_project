@@ -4,27 +4,31 @@ import java.util.ArrayList;
 
 public class Drug {
     private String name;
-    private String atc_code;
+    private String database_code;
     private String drugbank_id;
 
-    private ArrayList<Drug> drugs = new ArrayList<>();
+    private String database;
 
-    public Drug(String name, String atc_code, String drugbank_id) {
+
+    public Drug(String name, String database_code, String drugbank_id, String database) {
         this.name = name;
-        this.atc_code = atc_code;
+        this.database_code = database_code;
         this.drugbank_id = drugbank_id;
+        this.database = database;
     }
 
-    public Drug(String name) {
-        this.name = name;
-        this.atc_code = "";
+    public Drug(String database_code) {
+        this.database_code = database_code;
+        this.name = "";
         this.drugbank_id = "";
+        this.database = "";
     }
 
     public Drug() {
         this.name = "";
-        this.atc_code = "";
+        this.database_code = "";
         this.drugbank_id = "";
+        this.database = "";
     }
 
     public String getName() {
@@ -35,12 +39,12 @@ public class Drug {
         this.name = name;
     }
 
-    public String getAtc_code() {
-        return atc_code;
+    public String getDatabase_code() {
+        return database_code;
     }
 
-    public void setAtc_code(String atc_code) {
-        this.atc_code = atc_code;
+    public void setDatabase_code(String database_code) {
+        this.database_code = database_code;
     }
 
     public String getDrugbank_id() {
@@ -49,5 +53,23 @@ public class Drug {
 
     public void setDrugbank_id(String drugbank_id) {
         this.drugbank_id = drugbank_id;
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public void setDatabase(String database) {
+        this.database = database;
+    }
+
+    @Override
+    public String toString() {
+        return "Drug{" +
+                "name='" + name + '\'' +
+                ", database_code='" + database_code + '\'' +
+                ", drugbank_id='" + drugbank_id + '\'' +
+                ", database='" + database + '\'' +
+                '}';
     }
 }

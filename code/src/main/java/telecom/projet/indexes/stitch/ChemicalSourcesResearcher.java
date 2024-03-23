@@ -29,9 +29,23 @@ public class ChemicalSourcesResearcher {
         ArrayList<Drug> drugs = new ArrayList<>();
         for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
             Document doc = searcher.doc(scoreDoc.doc);
-            String atc_code = doc.get("atc_code");
-            drugs.add(new Drug(atc_code));
+            String database_code = doc.get("database_code");
+            String database = doc.get("database");
+            Drug drug = new Drug(database_code);
+            drug.setDatabase(database);
+            drugs.add(drug);
         }
         return drugs;
+    }
+
+    public static void main(String[] args) {
+        try {
+            ArrayList<Drug> drugs = searchingIndex("cid", "CIDm00028871");
+            for (Drug drug : drugs) {
+                System.out.println(drug);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
