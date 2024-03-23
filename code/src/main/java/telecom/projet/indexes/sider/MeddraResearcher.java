@@ -17,27 +17,30 @@ import org.apache.lucene.store.FSDirectory;
 
 public class MeddraResearcher {
     public static void main(String[] args) {
-        String indexDirectoryPath = "indexes/sider";
+        String dir_meddra_all_indications = "indexes/sider/meddra_all_indications";
+        String dir_meddra_all_se = "indexes/sider/meddra_all_se";
+        String dir_meddra_freq = "indexes/sider/meddra_freq";
+        String dir_meddra = "indexes/sider/meddra";
 
-        //What you are looking for
-        String querystr = "Headache";
+        //What we are looking for
+        String querystr = "syndrome";
+        String type_of_query = "side_effect";  //indication, umls, stitch_id
 
         try {
-            search(indexDirectoryPath, querystr);
+            search(dir_meddra, querystr, type_of_query);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
 
-    public static void search(String indexDirectoryPath, String querystr) throws IOException {
+    public static void search(String indexDirectoryPath, String querystr, String type_of_query) throws IOException {
         try {
             System.out.println("Searching for: " + querystr);
             Directory indexDirectory = FSDirectory.open(Paths.get(indexDirectoryPath));
             IndexReader reader = DirectoryReader.open(indexDirectory);
             IndexSearcher searcher = new IndexSearcher(reader);
             StandardAnalyzer analyzer = new StandardAnalyzer();
-            QueryParser parser = new QueryParser("indication", analyzer);
+            QueryParser parser = new QueryParser(type_of_query, analyzer);
             Query query = parser.parse(querystr);
 
             int maxHitsPerPage = 100; // Maximum number of hits per page
@@ -53,10 +56,11 @@ public class MeddraResearcher {
                 Document doc = searcher.doc(hit.doc);
                 // Get the value of the field
                 String umls = doc.get("umls");
-                String stitch_id = doc.get("stitch_id");
-                String indication = doc.get("indication");
+                //String stitch_id = doc.get("stitch_id");
+                String indication = doc.get("side_effect");
+                //System.out.println(umls +"\t"+ stitch_id +"\t"+ indication);
                 
-                System.out.println(umls +"\t"+ stitch_id +"\t"+ indication);
+                System.out.println(umls +"\t"+ indication);
             }
 
             reader.close();
