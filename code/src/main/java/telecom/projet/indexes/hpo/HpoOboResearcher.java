@@ -8,7 +8,6 @@ import org.apache.lucene.search.*;
 import org.apache.lucene.store.SimpleFSDirectory;
 
 import telecom.projet.model.Disease;
-import telecom.projet.model.Drug;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -25,7 +24,7 @@ public class HpoOboResearcher {
      * @throws IOException if there is an error while reading the index
      */
     public static ArrayList<Disease> searchingIndexObo(String field_to_research, String query) throws IOException {
-        String index_directory = "indexes/hpo";
+        String index_directory = "indexes/hpo_obo";
         SimpleFSDirectory directory = new SimpleFSDirectory(Path.of(index_directory));
         IndexReader reader = DirectoryReader.open(directory);
         IndexSearcher searcher = new IndexSearcher(reader);
