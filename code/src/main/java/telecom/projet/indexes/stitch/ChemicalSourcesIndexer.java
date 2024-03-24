@@ -67,7 +67,7 @@ public class ChemicalSourcesIndexer {
                 while (!executorService.isTerminated()) {
                     // Waiting for all tasks to complete
                 }
-                System.out.println("Optimizing index");
+                System.out.println("Optimizing index ...");
                 indexWriter.close();
             } catch (IOException e) {
                 e.printStackTrace();
