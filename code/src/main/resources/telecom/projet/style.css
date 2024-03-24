@@ -1,0 +1,9 @@
+.custom-button {
+    -fx-background-color: #4CAF50; /* Green */
+    -fx-text-fill: white; /* White text color */
+    -fx-padding: 10px 20px;
+}
+
+.text{
+    -fx-font-size: 25px;
+}
