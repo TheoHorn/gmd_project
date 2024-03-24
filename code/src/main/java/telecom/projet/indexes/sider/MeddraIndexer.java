@@ -20,7 +20,7 @@ public class MeddraIndexer {
      * This class is used to index the SIDER database
      */
     
-    public static void main(String[] args) {
+    public static void runIndexing() {
         
         String tsvFilePath = "data/SIDER/meddra_all_indications.tsv";
         indexTSV(tsvFilePath);
@@ -76,7 +76,7 @@ public class MeddraIndexer {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] fields = line.split("\t"); // Use "\t" as separator
-                Document doc = new Document();
+                Document doc;
                 // Create a new document and add the fields
                 switch(tsvFilePath){
                     case "data/SIDER/meddra_all_indications.tsv":
