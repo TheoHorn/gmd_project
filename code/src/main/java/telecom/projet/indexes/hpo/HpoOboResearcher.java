@@ -32,6 +32,7 @@ public class HpoOboResearcher {
         //BooleanQuery.Builder bool_query = new BooleanQuery.Builder(); -> will be useful for multiple fields
         //PhraseQuery phrase_query = new PhraseQuery(); -> will be useful for multiple words in query
         //TopDocsCollector, TopScoreDocCollector -> will be useful for sorting ?
+
         TopDocs topDocs;
         if (query.contains(" ")) {
             String[] words = query.split(" ");
@@ -47,6 +48,7 @@ public class HpoOboResearcher {
             topDocs = searcher.search(phrase_query, 10);
         }else{
             TermQuery term_query = new TermQuery(new Term(field_to_research, query));
+            System.out.println("Term: " + term_query);
             topDocs = searcher.search(term_query, 10);
         }
 
@@ -57,14 +59,17 @@ public class HpoOboResearcher {
             Document doc = searcher.doc(scoreDoc.doc);
             String name = doc.get("name");
             String cui_code = doc.get("cui_code");
+            //System.out.println("cui_code"+ doc.get("cui_code"));
             String hp_id = doc.get("hp_id");
+            //System.out.println("hp_id "+ doc.get("hp_id"));
             diseases.add(new Disease(name, cui_code, hp_id));
         }
         return diseases;
     }
 
     public static void main(String[] args) throws IOException {
-        ArrayList<Disease> diseases = searchingIndexObo("name", "Recurrent urinary tract infections");
+        ArrayList<Disease> diseases = searchingIndexObo("name", "Osteoid osteoma");
+        //ArrayList<Disease> diseases = searchingIndexObo("hp_id", "HP:0030431");
         for (Disease Disease : diseases) {
             System.out.println(Disease.getName()+" "+Disease.getCui_code()+" "+Disease.getHp_code());
         }

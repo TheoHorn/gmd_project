@@ -67,21 +67,26 @@ public class HpoOboIndexer {
             reader.readLine();
         }
         int count = 0;
+        Document doc = new Document();
+        
         while ((line = reader.readLine()) != null) {
-           
-            Document doc = new Document();
+
+            // System.out.println(count);
 
             if (line.startsWith("[Term]")) {
                 writer.addDocument(doc);
                 doc = new Document();
             } else if (line.startsWith("id:")) {
+                //System.out.println("hp_id ||| " + line.substring(4).trim());
                 doc.add(new StringField("hp_id", line.substring(4).trim(), Field.Store.YES));
             } else if (line.startsWith("name:")) {
-                doc.add(new TextField("name", line.substring(6).trim(), Field.Store.YES));
-            } else if (line.startsWith("xref:")) {
-                doc.add(new StringField("cui_code", line.substring(5).trim(), Field.Store.YES));
+                //System.out.println("name " + line.substring(6).trim());
+                doc.add(new StringField("name", line.substring(6).trim(), Field.Store.YES));
+            } else if (line.startsWith("xref: UMLS:")) {
+                //System.out.println("xref: UMLS: " + line.substring(11).trim());
+                doc.add(new StringField("cui_code", line.substring(11).trim(), Field.Store.YES));
             }
-            writer.addDocument(doc);
+            // writer.addDocument(doc);
 
             count++;
             if (count % batchSize == 0) {
