@@ -30,7 +30,7 @@ public class DrugbankResearcher {
 
         //BooleanQuery.Builder bool_query = new BooleanQuery.Builder(); -> will be useful for multiple fields
         //PhraseQuery phrase_query = new PhraseQuery(); -> will be useful for multiple words in query
-        //TopDocsCollector, TopScoreDocCollector -> will be useful for sorting ?
+        //TopDocsCollector, TopScoreDocCollector -> will be useful for sorting ? 
         TopDocs topDocs;
         if (query.contains(" ")) {
             String[] words = query.split(" ");
