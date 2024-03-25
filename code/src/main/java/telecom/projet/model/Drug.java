@@ -1,20 +1,21 @@
 package telecom.projet.model;
 
-import java.util.ArrayList;
-
 public class Drug {
     private String name;
     private String database_code;
     private String drugbank_id;
 
+    private Disease disease;
+
     private String database;
 
 
-    public Drug(String name, String database_code, String drugbank_id, String database) {
+    public Drug(String name, String database_code, String drugbank_id, String database, Disease disease) {
         this.name = name;
         this.database_code = database_code;
         this.drugbank_id = drugbank_id;
         this.database = database;
+        this.disease = disease;
     }
 
     public Drug(String database_code) {
@@ -22,6 +23,8 @@ public class Drug {
         this.name = "";
         this.drugbank_id = "";
         this.database = "";
+        this.disease = new Disease();
+
     }
 
     public Drug() {
@@ -29,6 +32,8 @@ public class Drug {
         this.database_code = "";
         this.drugbank_id = "";
         this.database = "";
+        this.disease = new Disease();
+
     }
 
     public String getName() {
@@ -63,6 +68,14 @@ public class Drug {
         this.database = database;
     }
 
+    public Disease getDisease() {
+        return disease;
+    }
+
+    public void setDisease(Disease disease) {
+        this.disease = disease;
+    }
+
     @Override
     public String toString() {
         return "Drug{" +
@@ -70,6 +83,7 @@ public class Drug {
                 ", database_code='" + database_code + '\'' +
                 ", drugbank_id='" + drugbank_id + '\'' +
                 ", database='" + database + '\'' +
+                ", disease=" + disease +
                 '}';
     }
 }

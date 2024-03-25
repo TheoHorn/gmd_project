@@ -5,10 +5,6 @@ public class Symptom {
     private String cui_code;
     private String name;
 
-    public Symptom(String cui_code, String name) {
-        this.cui_code = cui_code;
-        this.name = name;
-    }
 
     public Symptom(String name) {
         this.cui_code = "";
