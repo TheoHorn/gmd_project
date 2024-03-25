@@ -68,8 +68,8 @@ public class HpoOboResearcher {
     }
 
     public static void main(String[] args) throws IOException {
-        ArrayList<Disease> diseases = searchingIndexObo("name", "Osteoid osteoma");
-        //ArrayList<Disease> diseases = searchingIndexObo("hp_id", "HP:0030431");
+        //ArrayList<Disease> diseases = searchingIndexObo("name", "Osteoid osteoma");
+        ArrayList<Disease> diseases = searchingIndexObo("hp_id", "HP:0030431");
         for (Disease Disease : diseases) {
             System.out.println(Disease.getName()+" "+Disease.getCui_code()+" "+Disease.getHp_code());
         }
