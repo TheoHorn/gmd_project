@@ -37,7 +37,7 @@ public class Controller {
         if (symptoms.getText().isEmpty()){
             query.setText("Please enter a symptom");
         }else{
-            //display of the results
+            //line_of_infos of the results
             query.setText("Symptoms: " + symptoms.getText());
 
             //data
@@ -47,20 +47,20 @@ public class Controller {
             treatments.add("treatment3");
             treatments.add("treatment4");
             
-            vbox.getChildren().add(display("angine",treatments, "disease"));
-            vbox.getChildren().add(display("grippe",treatments, "disease"));
+            vbox.getChildren().add(line_of_infos("angine",treatments, "disease"));
+            vbox.getChildren().add(line_of_infos("grippe",treatments, "disease"));
         
 
             if (checkbox.isSelected()){
-                vbox.getChildren().add(display("aspirin",treatments, "side_effect"));
-                vbox.getChildren().add(display("ibuprofen",treatments, "side_effect"));
+                vbox.getChildren().add(line_of_infos("aspirin",treatments, "side_effect"));
+                vbox.getChildren().add(line_of_infos("ibuprofen",treatments, "side_effect"));
 
             }
             results.setContent(vbox);
         }
     }
 
-    public BorderPane display(String disease, ArrayList<String> treatments, String type){
+    public BorderPane line_of_infos(String disease, ArrayList<String> treatments, String type){
         //type = "disease" or "side_effect"
 
         //return a BorderPane composed of:
@@ -77,8 +77,8 @@ public class Controller {
             diseaseImage = new Image(getClass().getResource("images/meds.png").toExternalForm());
         }
         ImageView diseaseImageView = new ImageView(diseaseImage);
-        diseaseImageView.setFitHeight(80);
-        diseaseImageView.setFitWidth(80);
+        diseaseImageView.setFitHeight(50);
+        diseaseImageView.setFitWidth(50);
         diseaseImageView.setPreserveRatio(true);
         diseaseImageView.setStyle("-fx-padding: 10;");
 
@@ -88,10 +88,10 @@ public class Controller {
         VBox diseaseBox = new VBox();
         if (type.equals("disease")){
             diseaseBox.getChildren().add(new Label("Disease:"));
-            hboxLeft.setStyle("-fx-background-color: #FFC0CB;");
+            hboxLeft.setStyle("-fx-background-color: #FFC0CB;-fx-background-radius: 20;");
         }else{
             diseaseBox.getChildren().add(new Label("Drug causing a side effect:"));
-            hboxLeft.setStyle("-fx-background-color: #F1E2BE;");
+            hboxLeft.setStyle("-fx-background-color: #F1E2BE;-fx-background-radius: 20;");
 
         }
         diseaseBox.getChildren().add(new Label(disease));
@@ -105,8 +105,8 @@ public class Controller {
         //-----------center
         Image arrowImage = new Image(getClass().getResource("images/arrow.png").toExternalForm());
         ImageView arrowImageView = new ImageView(arrowImage);
-        arrowImageView.setFitHeight(80);
-        arrowImageView.setFitWidth(80);
+        arrowImageView.setFitHeight(50);
+        arrowImageView.setFitWidth(50);
         arrowImageView.setPreserveRatio(true);
         arrowImageView.setStyle("-fx-padding: 10;");
         borderPane.setCenter(arrowImageView);
@@ -119,10 +119,9 @@ public class Controller {
         //add image
         Image image = new Image(getClass().getResource("images/treatment.png").toExternalForm());
         ImageView imageView = new ImageView(image);
-        imageView.setFitHeight(80);
-        imageView.setFitWidth(80);
-        imageView.setPreserveRatio(true);
-        imageView.setStyle("-fx-padding: 10;");
+        imageView.setFitHeight(50);
+        imageView.setFitWidth(50);
+        
         hboxRight.getChildren().add(imageView);
 
         for (String treatment : treatments){
@@ -132,9 +131,8 @@ public class Controller {
         hboxRight.getChildren().add(vbox);
         
         //hbox.setStyle("-fx-background-color: #F0F8FF; -fx-border-radius: 30; -fx-padding: 10; -fx-spacing: 10;");
-        hboxRight.setStyle("-fx-background-color: #C0EFA7; -fx-padding: 10;");
+        hboxRight.setStyle("-fx-background-color: #C0EFA7;-fx-background-radius: 20;");
         borderPane.setRight(hboxRight);
-        borderPane.setStyle("-fx-background-color: #F0F8FF; -fx-border-radius: 30; -fx-padding: 30; -fx-spacing: 10;");
         
 
         //fill the width of the scrollpane
@@ -148,7 +146,7 @@ public class Controller {
 
         
         //space on the left and the right of the borderpane
-        borderPane.setStyle("-fx-padding: 0 50 0 50;");
+        //borderPane.setStyle("-fx-padding: 0 50 0 50;");
 
         
 
