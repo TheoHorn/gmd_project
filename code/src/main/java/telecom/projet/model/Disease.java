@@ -8,6 +8,8 @@ public class Disease {
 
     private String cui_code;
 
+    private String omim_code;
+
     private ArrayList<Symptom> symptoms = new ArrayList<>();
 
     private String hp_id;
@@ -65,4 +67,21 @@ public class Disease {
         this.hp_id = hp_code;
     }
 
+    public String getOmim_code() {
+        return omim_code;
+    }
+
+    public void setOmim_code(String omim_code) {
+        this.omim_code = omim_code;
+    }
+
+    public String toString() {
+        return "Disease{" +
+                "name='" + name + '\'' +
+                ", cui_code='" + cui_code + '\'' +
+                ", omim_code='" + omim_code + '\'' +
+                ", symptoms=" + symptoms +
+                ", hp_id='" + hp_id + '\'' +
+                '}';
+    }
 }
