@@ -10,6 +10,14 @@ public class Disease {
 
     private ArrayList<Symptom> symptoms = new ArrayList<>();
 
+    private String hp_id;
+
+    public Disease(String name, String cui_code, String hp_code) {
+        this.name = name;
+        this.cui_code = cui_code;
+        this.hp_id = hp_code;
+    }
+
     public Disease(String name, String cui_code) {
         this.name = name;
         this.cui_code = cui_code;
@@ -48,4 +56,13 @@ public class Disease {
     public void setSymptoms(ArrayList<Symptom> symptoms) {
         this.symptoms = symptoms;
     }
+
+    public String getHp_code() {
+        return hp_id;
+    }
+
+    public void setHp_code(String hp_code) {
+        this.hp_id = hp_code;
+    }
+
 }
