@@ -1,6 +1,7 @@
 package telecom.projet.sqliteQuestioner;
 
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,7 +28,7 @@ public class HpoApp {
     }
 
     
-    
+    //function that returns what is inside  the sql query
     public void selectAll(){
         String sql = "SELECT sign_id, disease_label FROM phenotype_annotation WHERE disease_label = \"Sotos syndrome\" ";
         
@@ -39,6 +40,32 @@ public class HpoApp {
             while (rs.next()) {
                 System.out.println(rs.getString("sign_id") +  "\t" + 
                                    rs.getString("disease_label"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+      /**
+     * Get the desease label from a HP_id
+     * @param HP_id
+     */
+    public void getDiseaseLabelFromHP_id(String HP_id){
+               String sql = "SELECT disease_label "
+                          + "FROM phenotype_annotation "
+                          +  "WHERE sign_id = ?";
+        
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+            
+            // setting the value of the parameter
+            pstmt.setString(1,HP_id);
+            //
+            ResultSet rs  = pstmt.executeQuery();
+            
+            //getting the results
+            while (rs.next()) {
+                System.out.println(rs.getString("disease_label"));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -69,7 +96,8 @@ public class HpoApp {
     public static void main(String[] args) {
         HpoApp app = new HpoApp();
         //app.listTables();
-        app.selectAll();
+        //app.selectAll();
+        app.getDiseaseLabelFromHP_id("HP:0000303");
     }
 
 }
