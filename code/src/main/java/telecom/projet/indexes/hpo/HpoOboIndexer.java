@@ -18,6 +18,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 public class HpoOboIndexer {
 
@@ -67,32 +68,42 @@ public class HpoOboIndexer {
             reader.readLine();
         }
         int count = 0;
-        Document doc = new Document();
+        //Document doc = new Document();
+
+        ArrayList<String> cui_codes = new ArrayList<String>();
+        String hp_id = null;
+        String name = null;
+        String cui_code ;
+        StringField idField, nameField;
         
         while ((line = reader.readLine()) != null) {
 
-            // System.out.println(count);
+            if (line.isEmpty()) {
 
-            if (line.startsWith("[Term]")) {
-                writer.addDocument(doc);
-                doc = new Document();
+                idField = new StringField("hp_id", hp_id, Field.Store.YES);
+                nameField = new StringField("name", name, Field.Store.YES);
+                for (String cuiCode : cui_codes) {
+                    Document doc = new Document();        
+                    doc.add(idField);
+                    doc.add(nameField);
+                    doc.add(new StringField("cui_code", cuiCode, Field.Store.YES));
+                    try {
+                        writer.addDocument(doc);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                cui_codes.clear();
+
             } else if (line.startsWith("id:")) {
-                //System.out.println("hp_id ||| " + line.substring(4).trim());
-                doc.add(new StringField("hp_id", line.substring(4).trim(), Field.Store.YES));
+                hp_id = line.substring(4).trim();             
             } else if (line.startsWith("name:")) {
-                //System.out.println("name " + line.substring(6).trim());
-                doc.add(new StringField("name", line.substring(6).trim(), Field.Store.YES));
+                name = line.substring(6).trim(); 
             } else if (line.startsWith("xref: UMLS:")) {
-                //System.out.println("xref: UMLS: " + line.substring(11).trim());
-                doc.add(new StringField("cui_code", line.substring(11).trim(), Field.Store.YES));
+                cui_code = line.substring(11).trim();
+                cui_codes.add(cui_code); 
             }
-            // writer.addDocument(doc);
-
             count++;
-            if (count % batchSize == 0) {
-                writer.commit(); // Commit after each batch
-                writer.deleteUnusedFiles(); // Delete unused index files
-            }
         }
         writer.commit();
         writer.close();

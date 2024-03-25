@@ -60,16 +60,15 @@ public class HpoOboResearcher {
             Document doc = searcher.doc(scoreDoc.doc);
             String name = doc.get("name");
             String cui_code = doc.get("cui_code");
-            //System.out.println("cui_code"+ doc.get("cui_code"));
             String hp_id = doc.get("hp_id");
-            //System.out.println("hp_id "+ doc.get("hp_id"));
             diseases.add(new Disease(name, cui_code, hp_id));
         }
         return diseases;
     }
 
     public static void main(String[] args) throws IOException {
-        ArrayList<Disease> diseases = searchingIndexObo("name", "Juvenile nasopharyngeal angiofibroma");
+        ArrayList<Disease> diseases = searchingIndexObo("name", "Abnormality of the temporomandibular joint");
+        //ArrayList<Disease> diseases = searchingIndexObo("name", "Cutaneous myxoma");
         //ArrayList<Disease> diseases = searchingIndexObo("hp_id", "HP:0030431");
         for (Disease Disease : diseases) {
             System.out.println(Disease.getName()+" "+Disease.getCui_code()+" "+Disease.getHp_code());
