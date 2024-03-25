@@ -18,7 +18,7 @@ public class App extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("main_page.fxml"));
         loader.setController(new Controller());
         Parent root = loader.load();
-        primaryStage.setScene(new Scene(root, 1500, 1500));
+        primaryStage.setScene(new Scene(root, 900, 900));
         primaryStage.show();
     }
 
