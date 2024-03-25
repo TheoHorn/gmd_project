@@ -34,23 +34,24 @@ public class HpoOboResearcher {
         //TopDocsCollector, TopScoreDocCollector -> will be useful for sorting ?
 
         TopDocs topDocs;
-        if (query.contains(" ")) {
-            String[] words = query.split(" ");
-            PhraseQuery.Builder builder = new PhraseQuery.Builder();
-            for (String word : words) {
-                builder.add(new Term(field_to_research, word));
-            }
-            PhraseQuery phrase_query = builder.build();
-            Term[] terms = phrase_query.getTerms();
-            for (Term term : terms) {
-                System.out.println("Term: " + term.text());
-            }
-            topDocs = searcher.search(phrase_query, 10);
-        }else{
-            TermQuery term_query = new TermQuery(new Term(field_to_research, query));
-            System.out.println("Term: " + term_query);
-            topDocs = searcher.search(term_query, 10);
-        }
+        //if (query.contains(" ")) {
+        //    String[] words = query.split(" ");
+        //    BooleanQuery.Builder booleanQueryBuilder = new BooleanQuery.Builder();
+        //    for (String word : words) {
+        //        booleanQueryBuilder.add(new TermQuery(new Term(field_to_research, word)), BooleanClause.Occur.SHOULD);
+        //    }
+        //    BooleanQuery booleanQuery = booleanQueryBuilder.build();
+        //    System.out.println("Term: " + booleanQuery);
+        //    topDocs = searcher.search(booleanQuery, 10);
+        //} else {
+        //    TermQuery termQuery = new TermQuery(new Term(field_to_research, query));
+        //    System.out.println("Term: " + termQuery);
+        //    topDocs = searcher.search(termQuery, 10);
+        //}
+
+        TermQuery termQuery = new TermQuery(new Term(field_to_research, query));
+        System.out.println("Term: " + termQuery);
+        topDocs = searcher.search(termQuery, 10);
 
         System.out.println("Total hits: " + topDocs.totalHits);
 
@@ -68,8 +69,8 @@ public class HpoOboResearcher {
     }
 
     public static void main(String[] args) throws IOException {
-        //ArrayList<Disease> diseases = searchingIndexObo("name", "Osteoid osteoma");
-        ArrayList<Disease> diseases = searchingIndexObo("hp_id", "HP:0030431");
+        ArrayList<Disease> diseases = searchingIndexObo("name", "Juvenile nasopharyngeal angiofibroma");
+        //ArrayList<Disease> diseases = searchingIndexObo("hp_id", "HP:0030431");
         for (Disease Disease : diseases) {
             System.out.println(Disease.getName()+" "+Disease.getCui_code()+" "+Disease.getHp_code());
         }
