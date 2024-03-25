@@ -4,6 +4,8 @@ import telecom.projet.indexes.drugbank.DrugbankIndexer;
 import telecom.projet.indexes.hpo.HpoOboIndexer;
 import telecom.projet.indexes.sider.MeddraIndexer;
 import telecom.projet.indexes.stitch.ChemicalSourcesIndexer;
+import telecom.projet.indexes.omim.OmimIndexerCSV;
+import telecom.projet.indexes.hpo.HpoOboIndexer;
 
 public class Indexer {
 
@@ -15,7 +17,10 @@ public class Indexer {
         ChemicalSourcesIndexer.runIndexing();
         System.out.println("Indexing Sider Meddra data...");
         MeddraIndexer.runIndexing();
-        System.out.println("Indexing HPO.obo data...");
+        System.out.println("Indexing Omim data...");
+        OmimIndexerCSV.runIndexing();
+        // OmimIndexerTXT.runIndexing();
+        System.out.println("Indexing HPO data...");
         HpoOboIndexer.runIndexing();
         System.out.println("All Indexing done");
     }

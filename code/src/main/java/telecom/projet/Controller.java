@@ -40,28 +40,43 @@ public class Controller {
             //line_of_infos of the results
             query.setText("Symptoms: " + symptoms.getText());
 
-            //data
+            
+            //data test
             ArrayList<String> treatments = new ArrayList<>();
             treatments.add("treatment1zzzzzzzzzzzzzzzzzzzzzzzzzzz");
             treatments.add("treatment2");
             treatments.add("treatment3");
             treatments.add("treatment4");
+            treatments.add("treatment5");
+            treatments.add("treatment6");
+            treatments.add("treatment7");
             
-            vbox.getChildren().add(line_of_infos("angine",treatments, "disease"));
-            vbox.getChildren().add(line_of_infos("grippe",treatments, "disease"));
-        
+            
+            
 
-            if (checkbox.isSelected()){
-                vbox.getChildren().add(line_of_infos("aspirin",treatments, "side_effect"));
-                vbox.getChildren().add(line_of_infos("ibuprofen",treatments, "side_effect"));
+            
+            if (checkbox.isSelected()){ //if the symptom is a side effect
+                Data data = new Data(symptoms.getText(), true);
+                vbox.getChildren().add(line_of_infos("aspirin",treatments, true));
+                vbox.getChildren().add(line_of_infos("ibuprofen",treatments, true));
+                vbox.getChildren().add(line_of_infos("angine",treatments, false));
+                vbox.getChildren().add(line_of_infos("grippe",treatments, false));
 
+            }else{
+                Data data = new Data(symptoms.getText(), false);
+                vbox.getChildren().add(line_of_infos("angine",treatments, false));
+                vbox.getChildren().add(line_of_infos("grippe",treatments, false));
             }
+
+            //display
+            
+
             results.setContent(vbox);
         }
     }
 
-    public BorderPane line_of_infos(String disease, ArrayList<String> treatments, String type){
-        //type = "disease" or "side_effect"
+    public BorderPane line_of_infos(String disease, ArrayList<String> treatments, Boolean side_effect){
+        //side_effect = true if it's a side effect, false if it's a disease
 
         //return a BorderPane composed of:
         //hboxLeft{ ImageView[image] | VBox[disease]} | ImageView[arrow]| hboxRight{ ImageView[image] | VBox[treatments]}
@@ -73,7 +88,7 @@ public class Controller {
 
         Image diseaseImage = new Image(getClass().getResource("images/disease.png").toExternalForm());
         
-        if (type.equals("side_effect")){
+        if (side_effect){
             diseaseImage = new Image(getClass().getResource("images/meds.png").toExternalForm());
         }
         ImageView diseaseImageView = new ImageView(diseaseImage);
@@ -86,7 +101,7 @@ public class Controller {
 
 
         VBox diseaseBox = new VBox();
-        if (type.equals("disease")){
+        if (!side_effect){
             diseaseBox.getChildren().add(new Label("Disease:"));
             hboxLeft.setStyle("-fx-background-color: #FFC0CB;-fx-background-radius: 20;");
         }else{
