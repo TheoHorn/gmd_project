@@ -7,6 +7,7 @@ module telecom.projet {
     requires lucene.queryparser;
     requires lucene.queries;
     requires org.xerial.sqlitejdbc;
+    requires transitive javafx.graphics;
     
 
     opens telecom.projet to javafx.fxml;
