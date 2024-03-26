@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import telecom.projet.indexes.Indexer;
 
 /**
  * JavaFX App
@@ -14,6 +15,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+        //Indexer.runAllIndexes();
         primaryStage.setTitle("Doctoflop");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("main_page.fxml"));
         loader.setController(new Controller());
