@@ -44,7 +44,7 @@ public class OmimResearcherTXT {
 
     public static void main(String[] args) {
         try {
-            ArrayList<Disease> Diseases = searchingIndex("omim_id", "100100");
+            ArrayList<Disease> Diseases = searchingIndex("symptoms", "headache");
             for (Disease Disease : Diseases) {
                 System.out.println(Disease);
             }

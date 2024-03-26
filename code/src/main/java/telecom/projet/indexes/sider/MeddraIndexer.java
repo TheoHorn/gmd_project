@@ -193,4 +193,8 @@ public class MeddraIndexer {
         }
         return doc;
     }
+
+    public static void main(String[] args) {
+        runIndexing();
+    }
 }
