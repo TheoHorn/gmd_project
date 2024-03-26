@@ -31,4 +31,8 @@ public class Indexer {
             System.out.println("Indexes directory already exists, skipping indexing");
         }
     }
+
+    public static void main(String[] args) {
+        runAllIndexes();
+    }
 }
