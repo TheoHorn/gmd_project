@@ -2,6 +2,7 @@ package telecom.projet.indexes;
 
 import telecom.projet.indexes.drugbank.DrugbankIndexer;
 import telecom.projet.indexes.hpo.HpoOboIndexer;
+import telecom.projet.indexes.hpo.HpoOboIndexerForSynonym;
 import telecom.projet.indexes.omim.OmimIndexerTXT;
 import telecom.projet.indexes.sider.MeddraIndexer;
 import telecom.projet.indexes.stitch.ChemicalSourcesIndexer;
@@ -26,6 +27,7 @@ public class Indexer {
             OmimIndexerTXT.runIndexing();
             System.out.println("Indexing HPO data...");
             HpoOboIndexer.runIndexing();
+            HpoOboIndexerForSynonym.runIndexing();
             System.out.println("All Indexing done");
         }else{
             System.out.println("Indexes directory already exists, skipping indexing");
