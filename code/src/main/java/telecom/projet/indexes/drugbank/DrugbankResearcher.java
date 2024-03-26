@@ -107,7 +107,8 @@ public class DrugbankResearcher {
             String name = doc.get("name");
             String dbk_id = doc.get("id");
             String database_code = doc.get("atc_code");
-            //TODO : add the field to disease class
+            Disease disease = new Disease(name, dbk_id);
+            diseases.add(disease);
         }
         return diseases;
     }
@@ -154,7 +155,11 @@ public class DrugbankResearcher {
             String name = doc.get("name");
             String dbk_id = doc.get("id");
             String database_code = doc.get("atc_code");
-            //TODO : add the field to treatment class
+            Treatment treatment = new Treatment();
+            treatment.setName(name);
+            treatment.setAtc_code(database_code);
+            treatment.setDrugbank_id(dbk_id);
+            treatments.add(treatment);
         }
         return treatments;
     }
