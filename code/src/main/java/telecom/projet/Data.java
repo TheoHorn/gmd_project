@@ -1,43 +1,71 @@
 package telecom.projet;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import telecom.projet.model.Disease;
+import telecom.projet.model.Drug;
 import telecom.projet.model.Record;
+import telecom.projet.model.Treatment;
+import telecom.projet.sqliteQuestioner.HpoApp;
+
+import static telecom.projet.indexes.drugbank.DrugbankResearcher.getTreatmentByATC;
+import static telecom.projet.indexes.hpo.HpoOboResearcher.searchingDiseaseBySymptom;
+import static telecom.projet.indexes.sider.MeddraResearcher.getCIDbyCUI_meddra_all_indication;
+import static telecom.projet.indexes.stitch.ChemicalSourcesResearcher.getATCbyCID;
 
 public class Data {
     
 
     private ArrayList<Record> records = new ArrayList<Record>();
     
-    public Data(String symptoms, Boolean side_effect) {
+    public Data(String symptoms, Boolean side_effect) throws IOException {
         /* Does all the searching and processing in the databases
          * @param: symptoms: the symptoms to search for
          * @param: side_effect: if true, search for side effects too
          */
         
         //TODO: split, gérer les OU/ET, mettre tout dans symptoms_list
-
-        search();
-        
-
-        //tests affichage
-        // Disease d = new Disease("disease1","cui_code");
-        // this.symptoms_list.add(new Symptom("symptom1"));
-        // drugs.add(new Drug("drug1","database_code","id","database",d));
-        // System.out.println("symptoms: "+symptoms_list);
-        // System.out.println("diseases: "+diseases);
-        // System.out.println("drugs: "+drugs);
-        // System.out.println("medicines: "+medicines);
-        
-        //tests affichage
-
-        Record record1 = new Record("symptom","disease", "treatment","hpo", 3);
-        Record record2 = new Record("mal de tete", "angine", "doliprane", "doctolib", 0);
-        this.records.add(record1);
-        this.records.add(record2);
+        this.records = searchDisease(symptoms);
+//        Record record1 = new Record("symptom","disease", "treatment","hpo", 3);
+//        Record record2 = new Record("mal de tete", "angine", "doliprane", "doctolib", 0);
+//        this.records.add(record1);
+//        this.records.add(record2);
     }
-    public void search() {
-        //TODO: main function
+
+    /**
+     * Search the databases for the symptoms
+     * @param query the symptoms to search for
+     * @return an ArrayList of the records found
+     */
+    public ArrayList<Record> searchDisease(String query) throws IOException {
+        ArrayList<Record> records = new ArrayList<>();
+        ArrayList<Disease> diseases_possible = searchingDiseaseBySymptom(query);
+        for (Disease disease : diseases_possible) {
+            //TODO : get the name disease by medra
+            ArrayList<String> cids = getCIDbyCUI_meddra_all_indication(disease.getCui_code());
+            for (String cid : cids) {
+                ArrayList<String> atc_codes = getATCbyCID(cid);
+                ArrayList<Treatment> treatments = getTreatmentByATC(atc_codes);
+                for (Treatment treatment : treatments) {
+                    Record record = new Record(query, cid, treatment.getName(), "", 0);
+                    records.add(record);
+                }
+            }
+        }
+
+        return records;
+    }
+
+    /**
+     * Search the databases for the symptoms
+     * @param query the symptoms to search for
+     * @return an ArrayList of the records found
+     */
+    public ArrayList<Record> searchSideEffect(String query) {
+        ArrayList<Record> records = new ArrayList<>();
+
+        return records;
     }
 
     public ArrayList<Record> getRecords() {

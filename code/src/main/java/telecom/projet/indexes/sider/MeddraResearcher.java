@@ -22,7 +22,7 @@ public class MeddraResearcher {
         //CID: code for a drug
 
         //print the CID associated to a CUI (CUI: code for a side effect)
-        System.out.println(getCIDbyCUI_meddra_all_indication("C2062908"));
+        System.out.println(getCIDbyCUI_meddra_all_indication("C0001860"));
 
         //print the CID associated to a side effect
         System.out.println(getCIDbySideEffect_meddra_all_se("abdominal pain"));

@@ -16,6 +16,18 @@ import java.util.ArrayList;
 
 public class HpoOboResearcher {
 
+
+    public static ArrayList<Disease> searchingDiseaseBySymptom(String query_symptoms) throws IOException {
+        return searchingIndexObo("name", query_symptoms);
+    }
+
+    public static ArrayList<Disease> searchingDiseaseBySymptom(ArrayList<String> query_symptoms) throws IOException {
+        ArrayList<Disease> diseases = new ArrayList<>();
+        for (String query_symptom : query_symptoms) {
+            diseases.addAll(searchingIndexObo("name", query_symptom));
+        }
+        return diseases;
+    }
     /**
      * Search the index for a specific field and query
      * @param field_to_research, the field to search in the index
@@ -29,26 +41,7 @@ public class HpoOboResearcher {
         IndexReader reader = DirectoryReader.open(directory);
         IndexSearcher searcher = new IndexSearcher(reader);
 
-        //BooleanQuery.Builder bool_query = new BooleanQuery.Builder(); -> will be useful for multiple fields
-        //PhraseQuery phrase_query = new PhraseQuery(); -> will be useful for multiple words in query
-        //TopDocsCollector, TopScoreDocCollector -> will be useful for sorting ?
-
         TopDocs topDocs;
-        //if (query.contains(" ")) {
-        //    String[] words = query.split(" ");
-        //    BooleanQuery.Builder booleanQueryBuilder = new BooleanQuery.Builder();
-        //    for (String word : words) {
-        //        booleanQueryBuilder.add(new TermQuery(new Term(field_to_research, word)), BooleanClause.Occur.SHOULD);
-        //    }
-        //    BooleanQuery booleanQuery = booleanQueryBuilder.build();
-        //    System.out.println("Term: " + booleanQuery);
-        //    topDocs = searcher.search(booleanQuery, 10);
-        //} else {
-        //    TermQuery termQuery = new TermQuery(new Term(field_to_research, query));
-        //    System.out.println("Term: " + termQuery);
-        //    topDocs = searcher.search(termQuery, 10);
-        //}
-
         TermQuery termQuery = new TermQuery(new Term(field_to_research, query));
         System.out.println("Term: " + termQuery);
         topDocs = searcher.search(termQuery, 10);

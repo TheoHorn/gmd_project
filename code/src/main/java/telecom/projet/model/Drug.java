@@ -4,7 +4,9 @@ public class Drug {
     private String name;
     private String database_code;
     private String drugbank_id;
+
     private Disease disease;
+
     private String database;
 
 

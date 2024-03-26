@@ -1,5 +1,6 @@
 package telecom.projet;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javafx.fxml.FXML;
@@ -34,7 +35,7 @@ public class Controller {
     }
 
     @FXML
-    public void search() {
+    public void search() throws IOException {
         VBox vbox = new VBox();
         vbox.setStyle("-fx-alignment: center; -fx-spacing: 10;");
 

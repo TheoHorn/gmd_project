@@ -97,7 +97,7 @@ public class HpoApp {
         HpoApp app = new HpoApp();
         //app.listTables();
         //app.selectAll();
-        app.getDiseaseLabelFromHP_id("HP:0000303");
+        app.getDiseaseLabelFromHP_id("HP:0010754");
     }
 
 }
