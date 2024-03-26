@@ -57,54 +57,63 @@ public class OmimIndexerTXT {
     private static void indexDoc(IndexWriter writer, File file) {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
-            Document doc = new Document();
-            boolean hasFields = false; // Flag to check if the document has any fields
+            Document doc = null;
+            boolean insideRecord = false;
+            String fieldName = null;
+            StringBuilder fieldValue = new StringBuilder();
+
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
                 if (line.equals("*RECORD*")) {
                     // Start of a new document
-                    if (hasFields) {
+                    if (doc != null) {
+                        addFieldToDoc(doc, fieldName, fieldValue);
                         writer.addDocument(doc);
-                        doc = new Document(); // Reset the document for the next one
-                        hasFields = false; // Reset the flag
                     }
-                } else if (line.startsWith("*FIELD*")) {
+                    doc = new Document();
+                    insideRecord = true;
+                    fieldName = null;
+                    fieldValue.setLength(0);
+                } else if (insideRecord && line.startsWith("*FIELD*")) {
+                    // Start of a new field
+                    if (fieldName != null) {
+                        // If we have previously started reading a field, add it to the document
+                        addFieldToDoc(doc, fieldName, fieldValue);
+                    }
                     String[] parts = line.split("\\s+", 2);
                     if (parts.length == 2) {
-                        String fieldName = parts[1];
-                        StringBuilder fieldValue = new StringBuilder();
-                        // Read lines until the next *FIELD* or *RECORD*
-                        while ((line = reader.readLine()) != null && !line.startsWith("*FIELD*") && !line.equals("*RECORD*")) {
-                            if (fieldName.equals("NO") || fieldName.equals("TI") || fieldName.equals("CS")) {
-                                fieldValue.append(line).append(" ");
-                            }
-                        }
-                        // Add the field to the document
-                        if (fieldName.equals("NO") || fieldName.equals("TI") || fieldName.equals("CS")) {
-                            switch (fieldName) {
-                                case "NO":
-                                    doc.add(new StringField("omim_id", fieldValue.toString().trim(), Field.Store.YES));
-                                    break;
-                                case "TI":
-                                    doc.add(new TextField("name", fieldValue.toString().trim(), Field.Store.YES));
-                                    break;
-                                case "CS":
-                                    doc.add(new TextField("symptoms", fieldValue.toString().trim(), Field.Store.YES));
-                                    break;
-                            }
-                            hasFields = true; // Set the flag to indicate that the document has fields
-                        }
+                        fieldName = parts[1];
+                        fieldValue.setLength(0);
                     }
+                } else if (insideRecord) {
+                    // If we are inside a record and not at the start of a new field or record, append to the field value
+                    fieldValue.append(line).append(" ");
                 }
             }
+
             // Add the last document
-            if (hasFields) {
+            if (doc != null) {
+                addFieldToDoc(doc, fieldName, fieldValue);
                 writer.addDocument(doc);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    private static void addFieldToDoc(Document doc, String fieldName, StringBuilder fieldValue) {
+        if (fieldName != null && fieldValue.length() > 0) {
+            // Add the field to the document
+            if (fieldName.equals("NO")) {
+                doc.add(new StringField("omim_id", fieldValue.toString().trim(), Field.Store.YES));
+            } else if (fieldName.equals("TI")) {
+                doc.add(new TextField("name", fieldValue.toString().trim(), Field.Store.YES));
+            } else if (fieldName.equals("CS")) {
+                doc.add(new TextField("symptoms", fieldValue.toString().trim(), Field.Store.YES));
+            }
+        }
+    }
+
     public static void main(String[] args) {
         runIndexing();
     }
