@@ -2,23 +2,12 @@ package telecom.projet;
 
 import java.util.ArrayList;
 
-import telecom.projet.model.Disease;
-import telecom.projet.model.Drug;
-import telecom.projet.model.Medicine;
-import telecom.projet.model.Symptom;
+import telecom.projet.model.Record;
 
 public class Data {
-
-    private ArrayList<Symptom> symptoms_list = new ArrayList<Symptom>();
-
-    private ArrayList<Disease> diseases = new ArrayList<Disease>();
-
-    private ArrayList<Drug> drugs = new ArrayList<Drug>();
-
-    private ArrayList<Medicine> medicines = new ArrayList<Medicine>();
-
     
 
+    private ArrayList<Record> records = new ArrayList<Record>();
     
     public Data(String symptoms, Boolean side_effect) {
         /* Does all the searching and processing in the databases
@@ -28,13 +17,8 @@ public class Data {
         
         //TODO: split, gérer les OU/ET, mettre tout dans symptoms_list
 
-        this.symptoms_list.add(new Symptom(symptoms)); //only one symptom for now
-
-        case1();
-        if (side_effect){
-            case2();
-        }
-
+        search();
+        
 
         //tests affichage
         // Disease d = new Disease("disease1","cui_code");
@@ -45,35 +29,18 @@ public class Data {
         // System.out.println("drugs: "+drugs);
         // System.out.println("medicines: "+medicines);
         
-        
-        
+        //tests affichage
+
+        Record record1 = new Record("symptom","disease", "treatment","hpo", 3);
+        Record record2 = new Record("mal de tete", "angine", "doliprane", "doctolib", 0);
+        this.records.add(record1);
+        this.records.add(record2);
+    }
+    public void search() {
+        //TODO: main function
     }
 
-
-    private void case1() {
-        //TODO: search for diseases and treatments
-    }
-
-    private void case2() {
-        //TODO: search for drugs and treatments
-    }
-
-
-
-    //getters
-    public ArrayList<Symptom> getSymptoms_list() {
-        return symptoms_list;
-    }
-
-    public ArrayList<Disease> getDiseases() {
-        return diseases;
-    }
-
-    public ArrayList<Drug> getDrugs() {
-        return drugs;
-    }
-
-    public ArrayList<Medicine> getMedicines() {
-        return medicines;
+    public ArrayList<Record> getRecords() {
+        return this.records;
     }
 }

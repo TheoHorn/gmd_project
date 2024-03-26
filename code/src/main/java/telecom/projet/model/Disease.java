@@ -59,6 +59,10 @@ public class Disease {
         this.symptoms = symptoms;
     }
 
+    public void addSymptoms(Symptom symptom) {
+        this.symptoms.add(symptom);
+    }
+
     public String getHp_code() {
         return hp_id;
     }
