@@ -29,7 +29,7 @@
                   <Font size="20.0" />
                </font>
             </TextField>
-            <CheckBox fx:id="checkbox" mnemonicParsing="false" text="I take medication">
+            <CheckBox fx:id="checkbox" mnemonicParsing="false" text="Search for drugs that might cause this symptom">
                <font>
                   <Font size="14.0" />
                </font>

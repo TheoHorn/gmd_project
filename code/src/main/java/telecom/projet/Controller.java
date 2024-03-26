@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import telecom.projet.model.Record;
 
 public class Controller {
     @FXML private Label label; // Label à mettre à jour
@@ -25,6 +26,9 @@ public class Controller {
     @FXML private ScrollPane results;
 
     private Data data; // Instance pour les données
+
+    private ArrayList<Record> records = new ArrayList<>();
+
     public Controller() {
 
     }
@@ -37,45 +41,25 @@ public class Controller {
         if (symptoms.getText().isEmpty()){
             query.setText("Please enter a symptom");
         }else{
-            //line_of_infos of the results
-            query.setText("Symptoms: " + symptoms.getText());
+            query.setText("Symptoms: " + symptoms.getText()); //display the research made
 
-            
-            //data test
-            ArrayList<String> treatments = new ArrayList<>();
-            treatments.add("treatment1zzzzzzzzzzzzzzzzzzzzzzzzzzz");
-            treatments.add("treatment2");
-            treatments.add("treatment3");
-            treatments.add("treatment4");
-            treatments.add("treatment5");
-            treatments.add("treatment6");
-            treatments.add("treatment7");
-            
-            
-            
 
-            
-            if (checkbox.isSelected()){ //if the symptom is a side effect
-                Data data = new Data(symptoms.getText(), true);
-                vbox.getChildren().add(line_of_infos("aspirin",treatments, true));
-                vbox.getChildren().add(line_of_infos("ibuprofen",treatments, true));
-                vbox.getChildren().add(line_of_infos("angine",treatments, false));
-                vbox.getChildren().add(line_of_infos("grippe",treatments, false));
+            //Data class with all the results
+            //if the checkbox is selected, search for side effects too
+            data = new Data(symptoms.getText(), checkbox.isSelected());             
+            records = data.getRecords();
 
-            }else{
-                Data data = new Data(symptoms.getText(), false);
-                vbox.getChildren().add(line_of_infos("angine",treatments, false));
-                vbox.getChildren().add(line_of_infos("grippe",treatments, false));
+            for (Record record : records){
+                vbox.getChildren().add(line_of_infos(record.getProblem(), record.getTreatment(), checkbox.isSelected()));
             }
 
-            //display
-            
 
+            //display
             results.setContent(vbox);
         }
     }
 
-    public BorderPane line_of_infos(String disease, ArrayList<String> treatments, Boolean side_effect){
+    public BorderPane line_of_infos(String disease, String treatment, Boolean side_effect){
         //side_effect = true if it's a side effect, false if it's a disease
 
         //return a BorderPane composed of:
@@ -139,9 +123,8 @@ public class Controller {
         
         hboxRight.getChildren().add(imageView);
 
-        for (String treatment : treatments){
-            vbox.getChildren().add(new Label(treatment));
-        }
+        vbox.getChildren().add(new Label(treatment));
+        
         
         hboxRight.getChildren().add(vbox);
         
