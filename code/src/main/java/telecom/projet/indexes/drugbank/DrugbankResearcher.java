@@ -111,10 +111,10 @@ public class DrugbankResearcher {
             }
             PhraseQuery phrase_query = builder.build();
             Term[] terms = phrase_query.getTerms();
-            topDocs = searcher.search(phrase_query, 10);
+            topDocs = searcher.search(phrase_query, 100);
         }else{
             TermQuery term_query = new TermQuery(new Term(field_to_research, query));
-            topDocs = searcher.search(term_query, 10);
+            topDocs = searcher.search(term_query, 100);
         }
 
         ArrayList<Treatment> treatments = new ArrayList<>();
@@ -133,6 +133,9 @@ public class DrugbankResearcher {
     }
 
     public static void main(String[] args) throws IOException {
-        ArrayList<Disease> Diseases = searchingForDisease("database_code", "A07XA03");
+        ArrayList<Disease> Diseases = searchingForDisease("atc_code", "J01BA01");
+        for (Disease disease : Diseases) {
+            System.out.println(disease);
+        }
     }
 }

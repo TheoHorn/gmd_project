@@ -9,19 +9,15 @@ import static telecom.projet.indexes.sider.MeddraResearcher.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 
 
-
-import telecom.projet.model.Disease;
+import telecom.projet.model.*;
 import telecom.projet.model.Record;
-import telecom.projet.model.Symptom;
-import telecom.projet.model.Treatment;
+
 import static telecom.projet.indexes.hpo.HpoOboResearcherForSynonym.searchingSynonymsBySymptom;
 
 import static telecom.projet.indexes.drugbank.DrugbankResearcher.getTreatmentByATC;
 import static telecom.projet.indexes.sider.MeddraResearcher.getCIDbyCUI_meddra_all_indication;
-import static telecom.projet.indexes.sider.MeddraResearcher.getCIDbySideEffect_meddra_all_se;
 import static telecom.projet.indexes.stitch.ChemicalSourcesResearcher.getATCbyCID;
 
 public class Data {
@@ -93,6 +89,33 @@ public class Data {
         return records;
     }
 
+    /**
+     * Search the databases for the symptoms
+     * @param query the symptoms to search for
+     * @return an ArrayList of the records found
+     */
+    public ArrayList<Record> searchSideEffect(String query) throws IOException {
+        ArrayList<Record> records = new ArrayList<>();
+        ArrayList<SideEffect> sideEffects = getSideEffectByString(query);
+        for (SideEffect se : sideEffects) {
+            ArrayList<String> atc_cure_se = getATCbyCID(se.getCid());
+            ArrayList<Treatment> cure_treatments = getTreatmentByATC(atc_cure_se);
+            ArrayList<String> bad_cids = getCIDbyCUI_meddra_all_indication(se.getCui());
+            for (String cid : bad_cids) {
+                ArrayList<String> atc_bad_se = getATCbyCID(cid);
+                ArrayList<Treatment> bad_treatments = getTreatmentByATC(atc_bad_se);
+                for (Treatment cure : cure_treatments) {
+                    for (Treatment bad : bad_treatments) {
+                        //TODO : verify if they can be taken together
+                        Record record = new Record(query, bad.getName(), cure.getName(),"", 0);
+                        records.add(record);
+                    }
+                }
+            }
+        }
+        return records;
+    }
+
     private ArrayList<Disease> symptomsToDisease(ArrayList<Symptom> possibleSymptoms) {
         ArrayList<Disease> diseases = new ArrayList<>();
         for (Symptom symptom : possibleSymptoms) {
@@ -103,25 +126,6 @@ public class Data {
             diseases.add(disease);
         }
         return diseases;
-    }
-
-    /**
-     * Search the databases for the symptoms
-     * @param query the symptoms to search for
-     * @return an ArrayList of the records found
-     */
-    public ArrayList<Record> searchSideEffect(String query) throws IOException {
-        ArrayList<Record> records = new ArrayList<>();
-        ArrayList<String> cids = getCIDbySideEffect_meddra_all_se(query);
-        for (String cid : cids) {
-            ArrayList<String> atc_codes = getATCbyCID(cid);
-            ArrayList<Treatment> treatments = getTreatmentByATC(atc_codes);
-            for (Treatment treatment : treatments) {
-                Record record = new Record(query, cid, treatment.getName(), "", 0);
-                records.add(record);
-            }
-        }
-        return records;
     }
 
     private ArrayList<Record> recordsCleaning(ArrayList<Record> records) {

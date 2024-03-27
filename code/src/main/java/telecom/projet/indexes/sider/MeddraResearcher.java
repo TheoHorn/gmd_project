@@ -16,6 +16,7 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import telecom.projet.model.Disease;
+import telecom.projet.model.SideEffect;
 
 public class MeddraResearcher {
     public static void main(String[] args) {
@@ -24,9 +25,6 @@ public class MeddraResearcher {
 
         //print the CID associated to a CUI (CUI: code for a side effect)
         System.out.println(getCIDbyCUI_meddra_all_indication("C0001860"));
-
-        //print the CID associated to a side effect
-        System.out.println(getCIDbySideEffect_meddra_all_se("abdominal pain"));
 
         //print the CID associated to an indication
         System.out.println(getCIDbyIndication_meddra_all_indication("abdominal pain"));
@@ -74,24 +72,43 @@ public class MeddraResearcher {
         
     }
 
-    public static ArrayList<String> getCIDbySideEffect_meddra_all_se(String query){
-        /*
-         * This method is used to get the CID by side effect
-         * @param se: the side effect to search for
-         * @return: list of CID
-         */
-        String indexDirectoryPath = "indexes/sider/meddra_all_se";
-        String type_of_query = "side_effect";
-        //results
-        ArrayList<String> cid = new ArrayList<String>();
-        String type_of_result = "stitch_id";//cid = stitch_id
-
+    public static ArrayList<SideEffect> getSideEffectByString(String string_query){
         try {
-            cid = search(indexDirectoryPath, query, type_of_query, type_of_result);
+            ArrayList<String> result = new ArrayList<String>();
+            String indexDirectoryPath = "indexes/sider/meddra_all_se";
+            String type_of_query = "side_effect";
+            Directory indexDirectory = FSDirectory.open(Paths.get(indexDirectoryPath));
+            IndexReader reader = DirectoryReader.open(indexDirectory);
+            IndexSearcher searcher = new IndexSearcher(reader);
+            StandardAnalyzer analyzer = new StandardAnalyzer();
+            QueryParser parser = new QueryParser(type_of_query, analyzer);
+            Query query = parser.parse(string_query);
+
+            int maxHitsPerPage = 50; // Maximum number of hits per page
+            TopDocs results = searcher.search(query, maxHitsPerPage);
+            ScoreDoc[] hits = results.scoreDocs;
+
+
+            ArrayList<SideEffect> se = new ArrayList<SideEffect>();
+            for (ScoreDoc hit : hits) {
+                Document doc = searcher.doc(hit.doc);
+                String name = doc.get("side_effect");
+                String cui = doc.get("umls");
+                String cid = doc.get("stitch_id");
+                SideEffect side_effect = new SideEffect();
+                side_effect.setName(name);
+                side_effect.setCid(cid);
+                side_effect.setCui(cui);
+                if (!se.contains(side_effect)){
+                    se.add(side_effect);
+                }
+            }
+            reader.close();
+            return se;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return cid;
+        return null;
     }
 
     public static ArrayList<String> getCIDbyIndication_meddra_all_indication(String query){

@@ -50,8 +50,10 @@ public class Controller {
             data = new Data(symptoms.getText(), checkbox.isSelected());             
             records = data.getRecords();
 
-            for (Record record : records){
-                vbox.getChildren().add(line_of_infos(record.getProblem(), record.getTreatment(), checkbox.isSelected(), record.getData_source(), record.getScore()));
+            for (int i = 0; i < 30; i++){
+                if (i < records.size()){
+                    vbox.getChildren().add(line_of_infos(records.get(i).getProblem(), records.get(i).getTreatment(), checkbox.isSelected(), records.get(i).getData_source(), records.get(i).getScore()));
+                }
             }
 
 
