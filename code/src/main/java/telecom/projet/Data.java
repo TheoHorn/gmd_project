@@ -5,6 +5,7 @@ import static telecom.projet.indexes.sider.MeddraResearcher.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 import telecom.projet.model.Disease;
@@ -14,8 +15,6 @@ import static telecom.projet.indexes.hpo.HpoOboResearcherForSynonym.searchingSyn
 
 import static telecom.projet.indexes.drugbank.DrugbankResearcher.getTreatmentByATC;
 import static telecom.projet.indexes.hpo.HpoOboResearcher.searchingDiseaseBySymptom;
-import static telecom.projet.indexes.sider.MeddraResearcher.getCIDbyCUI_meddra_all_indication;
-import static telecom.projet.indexes.sider.MeddraResearcher.getCIDbySideEffect_meddra_all_se;
 import static telecom.projet.indexes.stitch.ChemicalSourcesResearcher.getATCbyCID;
 
 public class Data {
@@ -41,7 +40,27 @@ public class Data {
                 records.addAll(run(symptom, side_effect));
             }
         }else if (query_symptom.contains(" AND ") || query_symptom.contains(" and ")) {
-            String[] symptoms = query_symptom.split(" AND ");
+
+        String[] symptoms = query_symptom.split(" AND ");
+        ArrayList<Record> tempRecords = new ArrayList<>();
+
+        for (String symptom : symptoms) {
+            ArrayList<String> symptomSynonyms = searchingSynonymsBySymptom(symptom);
+            for (String synonym : symptomSynonyms) {
+                if (side_effect) {
+                    tempRecords.addAll(searchSideEffect(synonym));
+                } else {
+                    tempRecords.addAll(searchDisease(synonym));
+                }
+            }
+        }
+
+        // Keeping only the common records for AND operation
+        for (Record record : new ArrayList<>(tempRecords)) {
+            if (Collections.frequency(tempRecords, record) == symptoms.length) {
+                records.add(record);
+            }
+        }
 
 
         }else{
