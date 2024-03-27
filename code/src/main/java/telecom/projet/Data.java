@@ -34,6 +34,13 @@ public class Data {
          * @param: side_effect: if true, search for side effects too
          */
         ArrayList<Record> records = new ArrayList<>();
+
+        // Replace wildcard characters
+        // . -> any_character
+        // * -> 0 or more characters
+        query_symptom = query_symptom.replace(".", "\\.");
+        query_symptom = query_symptom.replace("*", ".*");
+
         if (query_symptom.contains(" OR ") || query_symptom.contains(" or ")) {
             String[] symptoms = query_symptom.split(" OR ");
             for (String symptom : symptoms) {

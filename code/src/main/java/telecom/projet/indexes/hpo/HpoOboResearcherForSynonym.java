@@ -17,9 +17,14 @@ import java.util.ArrayList;
 
 public class HpoOboResearcherForSynonym {
 
-    public static ArrayList<String> searchingSynonymsBySymptom(String query_symptoms) throws IOException {
-        return searchingIndexObo("name", query_symptoms);
-        
+    public static ArrayList<String> searchingSynonymsBySymptom(String query_symptom) throws IOException {
+        //if (query_symptom.contains(" * ")) {
+        //    String[] symptoms = query_symptom.split(" OR ");
+        //    for (String symptom : symptoms) {
+        //        records.addAll(run(symptom, side_effect));
+        //    }
+        //};
+        return searchingIndexObo("name", query_symptom);
     }
 
 
