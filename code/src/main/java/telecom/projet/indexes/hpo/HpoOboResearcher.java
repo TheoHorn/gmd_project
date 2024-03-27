@@ -43,8 +43,7 @@ public class HpoOboResearcher {
 
         TopDocs topDocs;
         TermQuery termQuery = new TermQuery(new Term(field_to_research, query));
-        System.out.println("Term: " + termQuery);
-        topDocs = searcher.search(termQuery, 10);
+        topDocs = searcher.search(termQuery, 10000);
 
         System.out.println("Total hits: " + topDocs.totalHits);
 
