@@ -14,6 +14,8 @@ public class Disease {
 
     private String hp_id;
 
+    private int score;
+
     public Disease(String name, String cui_code, String hp_code) {
         this.name = name;
         this.cui_code = cui_code;
@@ -77,6 +79,14 @@ public class Disease {
 
     public void setOmim_code(String omim_code) {
         this.omim_code = omim_code;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
     public String toString() {

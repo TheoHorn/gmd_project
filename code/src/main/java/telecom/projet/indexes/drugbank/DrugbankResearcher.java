@@ -165,6 +165,6 @@ public class DrugbankResearcher {
     }
 
     public static void main(String[] args) throws IOException {
-
+        searchingForTreatment("atc_code", "DB00770");
     }
 }

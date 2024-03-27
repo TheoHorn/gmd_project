@@ -15,6 +15,7 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import telecom.projet.model.Disease;
 
 public class MeddraResearcher {
     public static void main(String[] args) {
@@ -34,6 +35,8 @@ public class MeddraResearcher {
         System.out.println(getIndicationByCUI_meddra_all_indications("C0015967"));
 
     }
+
+    //public static int getScoreByDisease(String name_disease)
 
     public static ArrayList<String> getIndicationByCUI_meddra_all_indications(String cui){
         /*
@@ -65,8 +68,8 @@ public class MeddraResearcher {
         String indexDirectoryPath = "indexes/sider/meddra_all_se";
         String type_of_query = "side_effect";
         //results
-        ArrayList<String> cid = new ArrayList<String>(); //cid = UMLS
-        String type_of_result = "umls";//cid = UMLS
+        ArrayList<String> cid = new ArrayList<String>();
+        String type_of_result = "stitch_id";//cid = stitch_id
 
         System.out.println("Searching for CID associated to side effect " + query);
         try {

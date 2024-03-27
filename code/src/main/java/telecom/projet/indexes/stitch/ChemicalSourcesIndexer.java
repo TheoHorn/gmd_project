@@ -83,8 +83,12 @@ public class ChemicalSourcesIndexer {
                 String[] fields = line.split("\t");
                 Document doc = new Document();
                 doc.add(new StringField("cid", fields[0], Field.Store.NO));
-                doc.add(new TextField("database", fields[2], Field.Store.YES));
-                doc.add(new StringField("database_code", fields[3], Field.Store.YES));
+                if (fields[2].equals("ATC")){
+                    doc.add(new TextField("database", fields[2], Field.Store.YES));
+                    doc.add(new StringField("database_code", fields[3], Field.Store.YES));
+                } else {
+                    continue;
+                }
                 batch.add(doc);
                 if (batch.size() >= documentBatchSize) {
                     writer.addDocuments(batch);
