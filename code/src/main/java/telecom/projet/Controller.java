@@ -47,7 +47,7 @@ public class Controller {
 
             //Data class with all the results
             //if the checkbox is selected, search for side effects too
-            data = new Data(symptoms.getText(), checkbox.isSelected());             
+            data = new Data(symptoms.getText(), checkbox.isSelected());
             records = data.getRecords();
 
             for (Record record : records){
