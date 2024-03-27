@@ -26,7 +26,7 @@ import static telecom.projet.indexes.sider.MeddraResearcher.getCIDbySideEffect_m
 import static telecom.projet.indexes.stitch.ChemicalSourcesResearcher.getATCbyCID;
 
 public class Data {
-    
+
 
     private ArrayList<Record> records = new ArrayList<Record>();
 
@@ -35,7 +35,7 @@ public class Data {
         this.records = run(query_symptom, side_effect);
     }
 
-    
+
     public ArrayList<Record> run(String query_symptom, Boolean side_effect) throws IOException {
         /* Does all the searching and processing in the databases
          * @param: symptoms: the symptoms to search for
