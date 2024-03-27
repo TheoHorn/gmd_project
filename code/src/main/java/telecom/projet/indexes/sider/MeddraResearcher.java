@@ -38,6 +38,22 @@ public class MeddraResearcher {
 
     //public static int getScoreByDisease(String name_disease)
 
+    public static ArrayList<Disease> searchingCuiMeddra (ArrayList<Disease> diseases) throws IOException {
+        /*
+         * This method is used to get the CUI by disease
+         * @param diseases: the list of diseases to search for
+         * @return: list of diseases with CUI
+         */
+        ArrayList<Disease> diseases_with_cui = new ArrayList<Disease>();
+        for (Disease disease : diseases) {
+            ArrayList<String> cui_founds = search("indexes/sider/meddra",disease.getName(), "symptom", "cui");
+            if (cui_founds.size() > 0) {
+                disease.setCui_code(cui_founds.get(0));
+                diseases_with_cui.add(disease);
+            }
+        }
+        return diseases_with_cui;
+    }
     public static ArrayList<String> getIndicationByCUI_meddra_all_indications(String cui){
         /*
          * This method is used to get the indication by CUI
@@ -47,7 +63,7 @@ public class MeddraResearcher {
         ArrayList<String> indication = new ArrayList<String>();
         String indexDirectoryPath = "indexes/sider/meddra_all_indications";
         String type_of_query = "umls";//cid = UMLS
-        String type_of_result = "indication";//indication = indication
+        String type_of_result = "indication";
 
         try {
             indication = search(indexDirectoryPath, cui, type_of_query, type_of_result);
@@ -131,7 +147,7 @@ public class MeddraResearcher {
             QueryParser parser = new QueryParser(type_of_query, analyzer);
             Query query = parser.parse(querystr);
 
-            int maxHitsPerPage = 100; // Maximum number of hits per page
+            int maxHitsPerPage = 1000; // Maximum number of hits per page
             TopDocs results = searcher.search(query, maxHitsPerPage);
             ScoreDoc[] hits = results.scoreDocs;
 

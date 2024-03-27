@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -35,8 +37,8 @@ public class OmimIndexerTXT {
             System.exit(1);
         }
 
-         // Start indexing
-         try{
+        // Start indexing
+        try{
             Analyzer analyzer = new StandardAnalyzer();
             IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
             IndexWriter indexWriter = new IndexWriter(indexDirectory, iwc);
@@ -50,67 +52,56 @@ public class OmimIndexerTXT {
         }catch(Exception e){
             System.out.println("Caught a " + e.getClass() + "\n with message: " + e.getMessage());
         }
-       
+
     }
 
 
     private static void indexDoc(IndexWriter writer, File file) {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line;
-            Document doc = null;
-            boolean insideRecord = false;
-            String fieldName = null;
-            StringBuilder fieldValue = new StringBuilder();
-
-            while ((line = reader.readLine()) != null) {
-                line = line.trim();
-                if (line.equals("*RECORD*")) {
-                    // Start of a new document
-                    if (doc != null) {
-                        addFieldToDoc(doc, fieldName, fieldValue);
+            String line = reader.readLine();
+            Document doc = new Document();
+            String omim_id = null;
+            String name = null;
+            String symptoms = null;
+            while (line != null){
+                if (line.startsWith("*RECORD*")) {
+                    if (omim_id != null && name != null && symptoms != null){
+                        doc.add(new StringField("omim_id", omim_id, Field.Store.YES));
+                        doc.add(new TextField("name", name.toLowerCase(), Field.Store.YES));
+                        doc.add(new TextField("symptoms", symptoms.trim().toLowerCase(), Field.Store.YES));
                         writer.addDocument(doc);
                     }
+                    omim_id = null;
+                    name = null;
+                    symptoms = null;
                     doc = new Document();
-                    insideRecord = true;
-                    fieldName = null;
-                    fieldValue.setLength(0);
-                } else if (insideRecord && line.startsWith("*FIELD*")) {
-                    // Start of a new field
-                    if (fieldName != null) {
-                        // If we have previously started reading a field, add it to the document
-                        addFieldToDoc(doc, fieldName, fieldValue);
+                    line = reader.readLine();
+                } else if (line.startsWith("*FIELD* NO")) {
+                    line = reader.readLine();
+                    omim_id = line;
+                } else if (line.startsWith("*FIELD* TI")) {
+                    line = reader.readLine();
+                    String[] parts = line.split(";;");
+                    int spaceIndex = parts[0].indexOf(' ');
+                    if (spaceIndex != -1) { // If space is found
+                        // Extract the substring after the first space
+                        parts[0] = parts[0].substring(spaceIndex + 1);
                     }
-                    String[] parts = line.split("\\s+", 2);
-                    if (parts.length == 2) {
-                        fieldName = parts[1];
-                        fieldValue.setLength(0);
+                    name = parts[0];
+                } else if (line.startsWith("*FIELD* CS")) {
+                    while ((line = reader.readLine()) != null && !line.startsWith("*FIELD*")) {
+                        if (symptoms == null) {
+                            symptoms = line;
+                        } else {
+                            symptoms += " " + line;
+                        }
                     }
-                } else if (insideRecord) {
-                    // If we are inside a record and not at the start of a new field or record, append to the field value
-                    fieldValue.append(line).append(" ");
+                }else{
+                    line = reader.readLine();
                 }
             }
-
-            // Add the last document
-            if (doc != null) {
-                addFieldToDoc(doc, fieldName, fieldValue);
-                writer.addDocument(doc);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void addFieldToDoc(Document doc, String fieldName, StringBuilder fieldValue) {
-        if (fieldName != null && fieldValue.length() > 0) {
-            // Add the field to the document
-            if (fieldName.equals("NO")) {
-                doc.add(new StringField("omim_id", fieldValue.toString().trim(), Field.Store.YES));
-            } else if (fieldName.equals("TI")) {
-                doc.add(new TextField("name", fieldValue.toString().trim(), Field.Store.YES));
-            } else if (fieldName.equals("CS")) {
-                doc.add(new TextField("symptoms", fieldValue.toString().trim(), Field.Store.YES));
-            }
+        }catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

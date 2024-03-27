@@ -114,11 +114,11 @@ public class DrugbankIndexer {
                 public void endElement(String uri, String localName, String qName) throws SAXException {
                     if (qName.equalsIgnoreCase("drug")) {
                         idField = new StringField("id", id, Field.Store.YES);
-                        nameField = new TextField("name", name, Field.Store.YES);
-                        toxicityField = new TextField("toxicity", toxicity, Field.Store.NO);
-                        indicationField = new TextField("indication", indication, Field.Store.NO);
-                        stateField = new TextField("state", state, Field.Store.NO);
-                        pharmacodynamicsField = new TextField("pharmacodynamics", pharmacodynamics, Field.Store.NO);
+                        nameField = new TextField("name", name.toLowerCase(), Field.Store.YES);
+                        toxicityField = new TextField("toxicity", toxicity.toLowerCase(), Field.Store.NO);
+                        indicationField = new TextField("indication", indication.toLowerCase(), Field.Store.NO);
+                        stateField = new TextField("state", state.toLowerCase(), Field.Store.NO);
+                        pharmacodynamicsField = new TextField("pharmacodynamics", pharmacodynamics.toLowerCase(), Field.Store.NO);
                         for (String atc_code : atc_codes) {
                             Document luceneDoc = new Document();
                             luceneDoc.add(idField);

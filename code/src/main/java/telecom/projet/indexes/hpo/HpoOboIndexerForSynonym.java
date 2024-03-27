@@ -82,7 +82,7 @@ public class HpoOboIndexerForSynonym {
             if (line.isEmpty()) {
 
                 idField = new StringField("hp_id", hp_id, Field.Store.YES);
-                nameField = new StringField("name", name, Field.Store.YES);
+                nameField = new StringField("name", name.toLowerCase(), Field.Store.YES);
                 cuiCodeField = new StringField("cui_code", cui_code, Field.Store.YES);
                 for (String synonymOf : synonyms) {
                     Document doc = new Document();        

@@ -65,7 +65,7 @@ public class HpoOboResearcherForSynonym {
     }
 
     public static void main(String[] args) throws IOException {
-        ArrayList<String> synonyms = searchingIndexObo("name", "Migraine");
+        ArrayList<String> synonyms = searchingIndexObo("name", "fever");
         //ArrayList<Disease> diseases = searchingIndexObo("name", "Cutaneous myxoma");
         //ArrayList<Disease> diseases = searchingIndexObo("hp_id", "HP:0030431");
         for (String synonym : synonyms){
