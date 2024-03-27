@@ -1,5 +1,10 @@
 package telecom.projet;
 
+import static telecom.projet.indexes.drugbank.DrugbankResearcher.*;
+import static telecom.projet.indexes.hpo.HpoOboResearcher.*;
+import static telecom.projet.indexes.sider.MeddraResearcher.*;
+import static telecom.projet.indexes.stitch.ChemicalSourcesResearcher.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -51,13 +56,14 @@ public class Data {
 //            disease.setScore(getScoreByDisease(disease));
 //        }
         for (Disease disease : diseases_possible) {
-            //TODO : get the name disease by medra
+
+            String disease_name_meddra = getIndicationByCUI_meddra_all_indications(disease.getCui_code()).get(0);
             ArrayList<String> cids = getCIDbyCUI_meddra_all_indication(disease.getCui_code());
             for (String cid : cids) {
                 ArrayList<String> atc_codes = getATCbyCID(cid);
                 ArrayList<Treatment> treatments = getTreatmentByATC(atc_codes);
                 for (Treatment treatment : treatments) {
-                    Record record = new Record(query, cid, treatment.getName(), "", 0);
+                    Record record = new Record(query, disease_name_meddra, treatment.getName(), "", 0);
                     records.add(record);
                 }
             }

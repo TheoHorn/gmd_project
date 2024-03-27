@@ -51,7 +51,7 @@ public class Controller {
             records = data.getRecords();
 
             for (Record record : records){
-                vbox.getChildren().add(line_of_infos(record.getProblem(), record.getTreatment(), checkbox.isSelected()));
+                vbox.getChildren().add(line_of_infos(record.getProblem(), record.getTreatment(), checkbox.isSelected(), record.getData_source(), record.getScore()));
             }
 
 
@@ -60,7 +60,7 @@ public class Controller {
         }
     }
 
-    public BorderPane line_of_infos(String disease, String treatment, Boolean side_effect){
+    public BorderPane line_of_infos(String disease, String treatment, Boolean side_effect, String data_source, int score){
         //side_effect = true if it's a side effect, false if it's a disease
 
         //return a BorderPane composed of:
@@ -113,8 +113,7 @@ public class Controller {
 
         
         //----------right
-        VBox vbox = new VBox();
-
+        
         HBox hboxRight = new HBox();
         //add image
         Image image = new Image(getClass().getResource("images/treatment.png").toExternalForm());
@@ -122,10 +121,23 @@ public class Controller {
         imageView.setFitHeight(50);
         imageView.setFitWidth(50);
         
-        hboxRight.getChildren().add(imageView);
-
-        vbox.getChildren().add(new Label(treatment));
         
+        hboxRight.getChildren().add(imageView);
+        
+        //display the treatment and its details
+        VBox vbox = new VBox();
+        vbox.getChildren().add(new Label(treatment));
+        vbox.getChildren().add(new Label("Data source: " + data_source));
+        vbox.getChildren().add(new Label("Score: " + score));
+
+        //style for the name of the treatment
+        vbox.getChildren().get(0).setStyle("-fx-text-fill: gray; -fx-font-weight: bold;");
+        
+        //wrap text for the children of vbox
+        for (int i = 0; i < vbox.getChildren().size(); i++){
+            ((Label)vbox.getChildren().get(i)).setWrapText(true);
+        }
+
         
         hboxRight.getChildren().add(vbox);
         
