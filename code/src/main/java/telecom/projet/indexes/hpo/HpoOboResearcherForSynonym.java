@@ -17,6 +17,11 @@ import java.util.ArrayList;
 
 public class HpoOboResearcherForSynonym {
 
+    public static ArrayList<Symptom> searchingSynonymsBySymptom(String query_symptoms) throws IOException {
+        return searchingIndexObo("name", query_symptoms);
+    }
+
+
     /**
      * Search the index for a specific field and query
      * @param field_to_research, the field to search in the index
