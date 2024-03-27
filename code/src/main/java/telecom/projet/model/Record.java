@@ -1,5 +1,7 @@
 package telecom.projet.model;
 
+import java.util.Objects;
+
 public class Record {
     private String symptom;
     private String problem;
@@ -45,5 +47,18 @@ public class Record {
     }
     public void setScore(int score) {
         this.score = score;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Record record = (Record) o;
+        return score == record.score && Objects.equals(symptom, record.symptom) && Objects.equals(problem, record.problem) && Objects.equals(treatment, record.treatment) && Objects.equals(data_source, record.data_source);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(symptom, problem, treatment, data_source, score);
     }
 }

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 import telecom.projet.model.Disease;
 import telecom.projet.model.Record;
-import telecom.projet.model.Symptom;
 import telecom.projet.model.Treatment;
 import static telecom.projet.indexes.hpo.HpoOboResearcherForSynonym.searchingSynonymsBySymptom;
 
@@ -23,26 +22,40 @@ public class Data {
     
 
     private ArrayList<Record> records = new ArrayList<Record>();
-    
+
     public Data(String query_symptom, Boolean side_effect) throws IOException {
+        this.records.clear();
+        this.records = run(query_symptom, side_effect);
+    }
+
+    
+    public ArrayList<Record> run(String query_symptom, Boolean side_effect) throws IOException {
         /* Does all the searching and processing in the databases
          * @param: symptoms: the symptoms to search for
          * @param: side_effect: if true, search for side effects too
          */
-        this.records.clear();
-        if (query_symptom.contains(" OR ") || query_symptom.contains(" AND ")) {
-            System.out.println("OR and AND are not supported yet");
-            return;
+        ArrayList<Record> records = new ArrayList<>();
+        if (query_symptom.contains(" OR ") || query_symptom.contains(" or ")) {
+            String[] symptoms = query_symptom.split(" OR ");
+            for (String symptom : symptoms) {
+                records.addAll(run(symptom, side_effect));
+            }
+        }else if (query_symptom.contains(" AND ") || query_symptom.contains(" and ")) {
+            String[] symptoms = query_symptom.split(" AND ");
+
+
         }else{
-            ArrayList<Symptom> symptoms = searchingSynonymsBySymptom(query_symptom);
-            for (Symptom symptom : symptoms) {
+            ArrayList<String> symptoms = searchingSynonymsBySymptom(query_symptom);
+            for (String symptom : symptoms) {
+                System.out.println(symptom);
                 if (side_effect) {
-                    this.records.addAll(searchSideEffect(symptom.getName()));
+                    records.addAll(searchSideEffect(symptom));
                 } else {
-                    this.records.addAll(searchDisease(symptom.getName()));
+                    records.addAll(searchDisease(symptom));
                 }
             }
         }
+        return recordsCleaning(records);
     }
 
     /**
@@ -93,6 +106,18 @@ public class Data {
             }
         }
         return records;
+    }
+
+    private ArrayList<Record> recordsCleaning(ArrayList<Record> records) {
+        /* Remove the duplicates in the records
+         */
+        ArrayList<Record> records_cleaned = new ArrayList<>();
+        for (Record record : records) {
+            if (!records_cleaned.contains(record)) {
+                records_cleaned.add(record);
+            }
+        }
+        return records_cleaned;
     }
 
     public ArrayList<Record> getRecords() {
