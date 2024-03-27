@@ -1,18 +1,16 @@
 package telecom.projet;
 
+import static telecom.projet.indexes.drugbank.DrugbankResearcher.*;
+import static telecom.projet.indexes.hpo.HpoOboResearcher.*;
+import static telecom.projet.indexes.sider.MeddraResearcher.*;
+import static telecom.projet.indexes.stitch.ChemicalSourcesResearcher.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
 import telecom.projet.model.Disease;
-import telecom.projet.model.Drug;
 import telecom.projet.model.Record;
 import telecom.projet.model.Treatment;
-import telecom.projet.sqliteQuestioner.HpoApp;
-
-import static telecom.projet.indexes.drugbank.DrugbankResearcher.getTreatmentByATC;
-import static telecom.projet.indexes.hpo.HpoOboResearcher.searchingDiseaseBySymptom;
-import static telecom.projet.indexes.sider.MeddraResearcher.getCIDbyCUI_meddra_all_indication;
-import static telecom.projet.indexes.stitch.ChemicalSourcesResearcher.getATCbyCID;
 
 public class Data {
     
@@ -43,12 +41,13 @@ public class Data {
         ArrayList<Disease> diseases_possible = searchingDiseaseBySymptom(query);
         for (Disease disease : diseases_possible) {
             //TODO : get the name disease by medra
+            String disease_name_meddra = getIndicationByCUI_meddra_all_indications(disease.getCui_code()).get(0);
             ArrayList<String> cids = getCIDbyCUI_meddra_all_indication(disease.getCui_code());
             for (String cid : cids) {
                 ArrayList<String> atc_codes = getATCbyCID(cid);
                 ArrayList<Treatment> treatments = getTreatmentByATC(atc_codes);
                 for (Treatment treatment : treatments) {
-                    Record record = new Record(query, cid, treatment.getName(), "", 0);
+                    Record record = new Record(query, disease_name_meddra, treatment.getName(), "", 0);
                     records.add(record);
                 }
             }
