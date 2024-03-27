@@ -18,7 +18,7 @@ public class Indexer {
             System.out.println("Indexing all data sources");
             System.out.println("Indexing Drugbank...");
             DrugbankIndexer.runIndexing();
-            System.out.println("Indexing Chemical Sources... (STITCH)... this may take a while. (around ~15-20 minutes)");
+            System.out.println("Indexing Chemical Sources... (STITCH)... this may take a while.");
             ChemicalSourcesIndexer.runIndexing();
             System.out.println("Indexing Sider Meddra data...");
             MeddraIndexer.runIndexing();

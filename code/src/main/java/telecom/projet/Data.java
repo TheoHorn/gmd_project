@@ -1,19 +1,17 @@
 package telecom.projet;
 
-import static telecom.projet.indexes.drugbank.DrugbankResearcher.*;
-import static telecom.projet.indexes.hpo.HpoOboResearcher.*;
 import static telecom.projet.indexes.sider.MeddraResearcher.*;
-import static telecom.projet.indexes.stitch.ChemicalSourcesResearcher.*;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javafx.collections.transformation.SortedList;
+
 import telecom.projet.model.Disease;
-import telecom.projet.model.Drug;
 import telecom.projet.model.Record;
+import telecom.projet.model.Symptom;
 import telecom.projet.model.Treatment;
-import telecom.projet.sqliteQuestioner.HpoApp;
+import static telecom.projet.indexes.hpo.HpoOboResearcherForSynonym.searchingSynonymsBySymptom;
 
 import static telecom.projet.indexes.drugbank.DrugbankResearcher.getTreatmentByATC;
 import static telecom.projet.indexes.hpo.HpoOboResearcher.searchingDiseaseBySymptom;
@@ -26,22 +24,25 @@ public class Data {
 
     private ArrayList<Record> records = new ArrayList<Record>();
     
-    public Data(String symptoms, Boolean side_effect) throws IOException {
+    public Data(String query_symptom, Boolean side_effect) throws IOException {
         /* Does all the searching and processing in the databases
          * @param: symptoms: the symptoms to search for
          * @param: side_effect: if true, search for side effects too
          */
-        
-        //TODO: split, gérer les OU/ET, mettre tout dans symptoms_list
-        if (side_effect) {
-            this.records = searchSideEffect(symptoms);
-        } else {
-            this.records = searchDisease(symptoms);
+        this.records.clear();
+        if (query_symptom.contains(" OR ") || query_symptom.contains(" AND ")) {
+            System.out.println("OR and AND are not supported yet");
+            return;
+        }else{
+            ArrayList<Symptom> symptoms = searchingSynonymsBySymptom(query_symptom);
+            for (Symptom symptom : symptoms) {
+                if (side_effect) {
+                    this.records.addAll(searchSideEffect(symptom.getName()));
+                } else {
+                    this.records.addAll(searchDisease(symptom.getName()));
+                }
+            }
         }
-//        Record record1 = new Record("symptom","disease", "treatment","hpo", 3);
-//        Record record2 = new Record("mal de tete", "angine", "doliprane", "doctolib", 0);
-//        this.records.add(record1);
-//        this.records.add(record2);
     }
 
     /**
@@ -56,8 +57,11 @@ public class Data {
 //            disease.setScore(getScoreByDisease(disease));
 //        }
         for (Disease disease : diseases_possible) {
-
-            String disease_name_meddra = getIndicationByCUI_meddra_all_indications(disease.getCui_code()).get(0);
+            ArrayList<String> diseases_names = getIndicationByCUI_meddra_all_indications(disease.getCui_code());
+            if (diseases_names.size() == 0) {
+                continue;
+            }
+            String disease_name_meddra = diseases_names.get(0);
             ArrayList<String> cids = getCIDbyCUI_meddra_all_indication(disease.getCui_code());
             for (String cid : cids) {
                 ArrayList<String> atc_codes = getATCbyCID(cid);

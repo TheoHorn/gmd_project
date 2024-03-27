@@ -35,9 +35,6 @@ public class ChemicalSourcesResearcher {
         TermQuery term_query = new TermQuery(new Term(field_to_research, query));
         TopDocs topDocs = searcher.search(term_query, 100);
 
-
-        System.out.println("Total hits: " + topDocs.totalHits);
-
         ArrayList<Drug> drugs = new ArrayList<>();
         for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
             Document doc = searcher.doc(scoreDoc.doc);

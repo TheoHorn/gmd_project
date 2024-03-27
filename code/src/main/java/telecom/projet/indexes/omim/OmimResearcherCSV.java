@@ -26,9 +26,6 @@ public class OmimResearcherCSV {
         TermQuery term_query = new TermQuery(new Term(field_to_research, query));
         TopDocs topDocs = searcher.search(term_query, 10);
 
-
-        System.out.println("Total hits: " + topDocs.totalHits);
-
         ArrayList<Disease> diseases = new ArrayList<>();
         for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
             Document doc = searcher.doc(scoreDoc.doc);

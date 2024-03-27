@@ -56,10 +56,8 @@ public class HpoOboResearcherForSynonym {
         //}
 
         TermQuery termQuery = new TermQuery(new Term(field_to_research, query));
-        System.out.println("Term: " + termQuery);
         topDocs = searcher.search(termQuery, 10);
 
-        System.out.println("Total hits: " + topDocs.totalHits);
 
         ArrayList<Symptom> symptoms = new ArrayList<>();
         for (ScoreDoc scoreDoc : topDocs.scoreDocs) {

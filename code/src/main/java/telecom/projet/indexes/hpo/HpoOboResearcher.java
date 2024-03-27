@@ -45,7 +45,6 @@ public class HpoOboResearcher {
         TermQuery termQuery = new TermQuery(new Term(field_to_research, query));
         topDocs = searcher.search(termQuery, 10000);
 
-        System.out.println("Total hits: " + topDocs.totalHits);
 
         ArrayList<Disease> diseases = new ArrayList<>();
         for (ScoreDoc scoreDoc : topDocs.scoreDocs) {

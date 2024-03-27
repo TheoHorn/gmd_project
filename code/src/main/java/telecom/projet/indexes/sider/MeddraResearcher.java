@@ -49,7 +49,6 @@ public class MeddraResearcher {
         String type_of_query = "umls";//cid = UMLS
         String type_of_result = "indication";//indication = indication
 
-        System.out.println("Searching for indication associated to CUI " + cui);
         try {
             indication = search(indexDirectoryPath, cui, type_of_query, type_of_result);
         } catch (Exception e) {
@@ -71,7 +70,6 @@ public class MeddraResearcher {
         ArrayList<String> cid = new ArrayList<String>();
         String type_of_result = "stitch_id";//cid = stitch_id
 
-        System.out.println("Searching for CID associated to side effect " + query);
         try {
             cid = search(indexDirectoryPath, query, type_of_query, type_of_result);
         } catch (Exception e) {
@@ -92,7 +90,6 @@ public class MeddraResearcher {
         ArrayList<String> cid = new ArrayList<String>(); //cid = UMLS
         String type_of_result = "umls";//cid = UMLS
 
-        System.out.println("Searching for CID associated to indication " + query);
         try {
             cid = search(indexDirectoryPath, query, type_of_query, type_of_result);
         } catch (Exception e) {
@@ -114,7 +111,6 @@ public class MeddraResearcher {
         String type_of_query = "umls";//cid = UMLS
         String type_of_result = "stitch_id";//cui = STITCH ID
 
-        System.out.println("Searching for CID associated to CUI " + query);
         try {
             cid = search(indexDirectoryPath, query, type_of_query, type_of_result);
         } catch (Exception e) {

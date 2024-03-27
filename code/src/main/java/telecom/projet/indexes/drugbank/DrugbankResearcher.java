@@ -138,16 +138,11 @@ public class DrugbankResearcher {
             }
             PhraseQuery phrase_query = builder.build();
             Term[] terms = phrase_query.getTerms();
-            for (Term term : terms) {
-                System.out.println("Term: " + term.text());
-            }
             topDocs = searcher.search(phrase_query, 10);
         }else{
             TermQuery term_query = new TermQuery(new Term(field_to_research, query));
             topDocs = searcher.search(term_query, 10);
         }
-
-        System.out.println("Total hits: " + topDocs.totalHits);
 
         ArrayList<Treatment> treatments = new ArrayList<>();
         for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
