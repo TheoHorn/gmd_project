@@ -30,6 +30,30 @@ public class MeddraResearcher {
         //print the CID associated to an indication
         System.out.println(getCIDbyIndication_meddra_all_indication("abdominal pain"));
 
+        //print the indication associated to a CUI
+        System.out.println(getIndicationByCUI_meddra_all_indications("C0015967"));
+
+    }
+
+    public static ArrayList<String> getIndicationByCUI_meddra_all_indications(String cui){
+        /*
+         * This method is used to get the indication by CUI
+         * @param cui: the CUI to search for
+         * @return: list of indication
+         */
+        ArrayList<String> indication = new ArrayList<String>();
+        String indexDirectoryPath = "indexes/sider/meddra_all_indications";
+        String type_of_query = "umls";//cid = UMLS
+        String type_of_result = "indication";//indication = indication
+
+        System.out.println("Searching for indication associated to CUI " + cui);
+        try {
+            indication = search(indexDirectoryPath, cui, type_of_query, type_of_result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return indication;
+        
     }
 
     public static ArrayList<String> getCIDbySideEffect_meddra_all_se(String query){
