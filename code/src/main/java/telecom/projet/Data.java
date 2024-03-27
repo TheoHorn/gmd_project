@@ -40,7 +40,7 @@ public class Data {
         ArrayList<Record> records = new ArrayList<>();
         ArrayList<Disease> diseases_possible = searchingDiseaseBySymptom(query);
         for (Disease disease : diseases_possible) {
-            //TODO : get the name disease by medra
+            
             String disease_name_meddra = getIndicationByCUI_meddra_all_indications(disease.getCui_code()).get(0);
             ArrayList<String> cids = getCIDbyCUI_meddra_all_indication(disease.getCui_code());
             for (String cid : cids) {
