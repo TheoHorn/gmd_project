@@ -140,7 +140,12 @@ public class Data {
         return records_cleaned;
     }
 
+    public void orderingByScore(){
+        this.records.sort((Record r1, Record r2) -> r2.getScore() - r1.getScore());
+    }
+
     public ArrayList<Record> getRecords() {
+        orderingByScore();
         return this.records;
     }
 }
