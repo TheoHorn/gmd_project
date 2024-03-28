@@ -20,6 +20,8 @@ public class Controller {
 
     @FXML private Label query;
 
+    @FXML private Label searching;
+
     @FXML private CheckBox checkbox;
 
     @FXML private TextField symptoms;
@@ -42,27 +44,26 @@ public class Controller {
         if (symptoms.getText().isEmpty()){
             query.setText("Please enter a symptom");
         }else{
-            query.setText("Symptoms: " + symptoms.getText()); //display the research made
-
-
+            //vbox.getChildren().clear();
             //Data class with all the results
             //if the checkbox is selected, search for side effects too
             data = new Data(symptoms.getText(), checkbox.isSelected());             
             records = data.getRecords();
-
+            
             for (int i = 0; i < 30; i++){
                 if (i < records.size()){
-                    vbox.getChildren().add(line_of_infos(records.get(i).getProblem(), records.get(i).getTreatment(), checkbox.isSelected(), records.get(i).getData_source(), records.get(i).getScore()));
+                    vbox.getChildren().add(line_of_infos(records.get(i).getSymptom(),records.get(i).getProblem(), records.get(i).getTreatment(), checkbox.isSelected(), records.get(i).getData_source(), records.get(i).getScore()));
                 }
             }
-
-
             //display
             results.setContent(vbox);
+
+            query.setText("Symptoms: " + symptoms.getText()+ " ("+ records.size() +" results)"); //display the research made
+            
         }
     }
 
-    public BorderPane line_of_infos(String disease, String treatment, Boolean side_effect, String data_source, int score){
+    public BorderPane line_of_infos(String symptom, String problem, String treatment, Boolean side_effect, String data_source, int score){
         //side_effect = true if it's a side effect, false if it's a disease
 
         //return a BorderPane composed of:
@@ -96,7 +97,7 @@ public class Controller {
             hboxLeft.setStyle("-fx-background-color: #F1E2BE;-fx-background-radius: 20;");
 
         }
-        diseaseBox.getChildren().add(new Label(disease));
+        diseaseBox.getChildren().add(new Label(problem + " (" + symptom + ")"));
         
         diseaseBox.getChildren().get(0).setStyle("-fx-text-fill: gray; -fx-font-weight: bold;");
         hboxLeft.getChildren().add(diseaseBox);
