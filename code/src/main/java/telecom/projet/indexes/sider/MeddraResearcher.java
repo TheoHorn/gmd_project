@@ -41,38 +41,6 @@ public class MeddraResearcher {
         System.out.println(getFrequenciesByCIDAndCUI_meddra_freq("C0015967", "CID100000000"));
 
 
-        System.out.println("Toxicity score: " + getNumberOfSideEffectsByCUI_meddra_freq("C0015967"));
-
-    }
-
-    //score de toxicité du médicament basé sur le nb d'effets secondaires et leur fréquence par médicament
-    public static int getNumberOfSideEffectsByCUI_meddra_freq(String cui){
-        /*
-         * This method is used to get the toxicity score of a drug
-         * @param cui: the CUI of the drug to search for
-         * @return: the toxicity score
-         */
-        int score = 0;
-        ArrayList<String> frequencies = getFrequencyByCID_meddra_freq(cui);
-        int nb_side_effects = frequencies.size();
-        return nb_side_effects;
-        //System.out.println("Number of side effects: " + nb_side_effects);
-        // for (String frequency : frequencies){
-        //     if (frequency.equals("Rare")){
-        //         frequency = "5%"
-        //     }else if (frequency.equals("Less frequent")){
-        //         score += 2;
-        //     }else if (frequency.equals("Frequent")){
-        //         score += 3;
-        //     }else if (frequency.equals("Very frequent")){
-        //         score += 4;
-        //     }
-        //     else{
-        //         score += 1;
-        //     }
-        // }
-
-        //return score;
     }
 
     public static ArrayList<String> getFrequencyByCID_meddra_freq(String query){
