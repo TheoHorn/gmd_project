@@ -99,6 +99,11 @@ public class Controller {
         }
         diseaseBox.getChildren().add(new Label(problem + " (" + symptom + ")"));
         
+        //wrap text for the children of diseaseBox
+        for (int i = 0; i < diseaseBox.getChildren().size(); i++){
+            ((Label)diseaseBox.getChildren().get(i)).setWrapText(true);
+        }
+
         diseaseBox.getChildren().get(0).setStyle("-fx-text-fill: gray; -fx-font-weight: bold;");
         hboxLeft.getChildren().add(diseaseBox);
         
