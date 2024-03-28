@@ -48,6 +48,7 @@ public class Data {
             }
         }else{
             ArrayList<String> symptoms = searchingSynonymsBySymptom(query_symptom);
+            symptoms.add(query_symptom);
             for (String symptom : symptoms) {
                 if (side_effect) {
                     records.addAll(searchSideEffect(symptom.toLowerCase()));
