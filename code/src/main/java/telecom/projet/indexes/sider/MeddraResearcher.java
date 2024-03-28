@@ -53,7 +53,15 @@ public class MeddraResearcher {
         ArrayList<Double> freqNb = new ArrayList<>();
         ArrayList<String> freq = getFrequencyByCIDAndCUI_meddra_freq(cid, cui);
         for (String f : freq) {
-            if (f.contains("%")){
+            // if (f.contains("-") && f.contains("%")){
+            //     String[] freqs = f.split("-");
+            //     freqNb.add((Double.parseDouble(freqs[0].substring(0, freqs[0].length()-1)) + Double.parseDouble(freqs[1].substring(0, freqs[1].length()-1)))/2);
+            // }
+            // if (f.contains("-")){
+            //     String[] freqs = f.split("-");
+            //     freqNb.add((Double.parseDouble(freqs[0]) + Double.parseDouble(freqs[1]))/2);
+            // }
+            if (f.contains("%") && !f.contains("-")){
                 freqNb.add(Double.parseDouble(f.substring(0, f.length()-1)));
             }
             else if (f.equals("common")){ freqNb.add(25.); }
@@ -63,7 +71,11 @@ public class MeddraResearcher {
             else if (f.equals("frequent")){ freqNb.add(25.); }
             else if (f.equals("infrequent")){ freqNb.add(5.); }
             else if (f.equals("postmarketing")){ freqNb.add(0.); }
-            }
+
+            
+        
+            
+        }
         //score : mean of the frequencies
         for (double f : freqNb) {
             score += f;

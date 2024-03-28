@@ -50,7 +50,8 @@ public class Controller {
             data = new Data(symptoms.getText(), checkbox.isSelected());
             records = data.getRecords();
             
-            for (int i = 0; i < 30; i++){
+            //display the first 50 results
+            for (int i = 0; i < 50; i++){
                 if (i < records.size()){
                     vbox.getChildren().add(line_of_infos(records.get(i).getSymptom(),records.get(i).getProblem(), records.get(i).getTreatment(), checkbox.isSelected(), records.get(i).getData_source(), records.get(i).getScore()));
                 }
@@ -107,7 +108,7 @@ public class Controller {
         diseaseBox.getChildren().get(0).setStyle("-fx-text-fill: gray; -fx-font-weight: bold;");
         
         if (side_effect){
-            diseaseBox.getChildren().add(new Label("Frequency: " + score));
+            diseaseBox.getChildren().add(new Label("Frequency: " + score + "%"));
         }
         hboxLeft.getChildren().add(diseaseBox);
         
