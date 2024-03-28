@@ -29,7 +29,7 @@ public class MeddraResearcher {
         System.out.println(getCIDbyCUI_meddra_all_indication("C0015967"));
 
         //print the CID associated to a side effect
-        System.out.println(getCIDbySideEffect_meddra_all_se("abdominal pain"));
+        //System.out.println(getCIDbySideEffect_meddra_all_se("abdominal pain"));
 
         //print the CID associated to an indication
         System.out.println(getCIDbyIndication_meddra_all_indication("abdominal pain"));
@@ -136,25 +136,6 @@ public class MeddraResearcher {
         return cid;
     }
 
-    public static ArrayList<String> getCIDbyCUI_meddra_all_indication(String query){
-        /*
-         * This method is used to get the CID by CUI
-         * @param cui: the CUI to search for
-         * @return: list of CID
-         */
-
-        ArrayList<String> cid = new ArrayList<String>(); //cid = UMLS
-        String indexDirectoryPath = "indexes/sider/meddra_all_indications";
-        String type_of_query = "umls";//cid = UMLS
-        String type_of_result = "stitch_id";//cui = STITCH ID
-
-        try {
-            cid = search(indexDirectoryPath, query, type_of_query, type_of_result);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return cid;
-    }
 
     public static ArrayList<String> getCIDbyCUI_meddra_all_indication(String query){
         /*
@@ -250,5 +231,4 @@ public class MeddraResearcher {
         
 }
         
-}
 }
