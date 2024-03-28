@@ -20,6 +20,8 @@ public class Controller {
 
     @FXML private Label query;
 
+    @FXML private Label searching;
+
     @FXML private CheckBox checkbox;
 
     @FXML private TextField symptoms;
@@ -42,23 +44,22 @@ public class Controller {
         if (symptoms.getText().isEmpty()){
             query.setText("Please enter a symptom");
         }else{
-            query.setText("Symptoms: " + symptoms.getText()); //display the research made
-
-
+            //vbox.getChildren().clear();
             //Data class with all the results
             //if the checkbox is selected, search for side effects too
             data = new Data(symptoms.getText(), checkbox.isSelected());             
             records = data.getRecords();
-
+            
             for (int i = 0; i < 30; i++){
                 if (i < records.size()){
                     vbox.getChildren().add(line_of_infos(records.get(i).getProblem(), records.get(i).getTreatment(), checkbox.isSelected(), records.get(i).getData_source(), records.get(i).getScore()));
                 }
             }
-
-
             //display
             results.setContent(vbox);
+
+            query.setText("Symptoms: " + symptoms.getText()+ " ("+ records.size() +" results)"); //display the research made
+            
         }
     }
 
