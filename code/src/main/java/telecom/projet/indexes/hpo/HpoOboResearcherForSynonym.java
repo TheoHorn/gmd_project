@@ -13,9 +13,28 @@ import telecom.projet.model.Symptom;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class HpoOboResearcherForSynonym {
+
+    public static ArrayList<String> searchingSynonymsBySymptom(String query_symptoms) throws IOException {
+        ArrayList<Symptom> symptoms = searchingIndexObo("synonym", query_symptoms);
+        Set<String> uniqueSynonyms = new HashSet<>();
+
+        for (Symptom symptom : symptoms) {
+            ArrayList<Symptom> s = searchingIndexObo("name", symptom.getName());
+            for (Symptom s1 : s) {
+                uniqueSynonyms.addAll(s1.getSynonyms());
+            }
+
+            uniqueSynonyms.add(symptom.getName());
+            uniqueSynonyms.addAll(symptom.getSynonyms());
+        }
+        return new ArrayList<>(uniqueSynonyms);
+    }
+
 
     /**
      * Search the index for a specific field and query
@@ -35,26 +54,10 @@ public class HpoOboResearcherForSynonym {
         //TopDocsCollector, TopScoreDocCollector -> will be useful for sorting ?
 
         TopDocs topDocs;
-        //if (query.contains(" ")) {
-        //    String[] words = query.split(" ");
-        //    BooleanQuery.Builder booleanQueryBuilder = new BooleanQuery.Builder();
-        //    for (String word : words) {
-        //        booleanQueryBuilder.add(new TermQuery(new Term(field_to_research, word)), BooleanClause.Occur.SHOULD);
-        //    }
-        //    BooleanQuery booleanQuery = booleanQueryBuilder.build();
-        //    System.out.println("Term: " + booleanQuery);
-        //    topDocs = searcher.search(booleanQuery, 10);
-        //} else {
-        //    TermQuery termQuery = new TermQuery(new Term(field_to_research, query));
-        //    System.out.println("Term: " + termQuery);
-        //    topDocs = searcher.search(termQuery, 10);
-        //}
 
         TermQuery termQuery = new TermQuery(new Term(field_to_research, query));
-        System.out.println("Term: " + termQuery);
         topDocs = searcher.search(termQuery, 10);
 
-        System.out.println("Total hits: " + topDocs.totalHits);
 
         ArrayList<Symptom> symptoms = new ArrayList<>();
         for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
@@ -65,25 +68,12 @@ public class HpoOboResearcherForSynonym {
             String synonym = doc.get("synonym");
             symptoms.add(new Symptom(name, synonym, cui_code, hp_id));
         }
+
         return symptoms;
     }
 
     public static void main(String[] args) throws IOException {
-        ArrayList<Symptom> symptoms = searchingIndexObo("name", "Abnormality of the temporomandibular joint");
-        //ArrayList<Disease> diseases = searchingIndexObo("name", "Cutaneous myxoma");
-        //ArrayList<Disease> diseases = searchingIndexObo("hp_id", "HP:0030431");
-        ArrayList<String> synonyms = new ArrayList<>();
-        String name = "";
-        for (Symptom Symptom : symptoms) {
-            synonyms.add(Symptom.getSynonyms().get(0));
-            //System.out.println(Symptom.getName()+" "+Symptom.getCui_code()+" "+Symptom.getHp_code());
-        }
-        System.out.println(name+" "+"synonyms : ");
-        for (String synonym : synonyms){
-            System.out.println(synonym+" ");
-        }
-        System.out.println("cui_code : " + symptoms.get(0).getCui_code());
-        System.out.println("END");
+        System.out.println(searchingSynonymsBySymptom("fever"));
     }
 }
 

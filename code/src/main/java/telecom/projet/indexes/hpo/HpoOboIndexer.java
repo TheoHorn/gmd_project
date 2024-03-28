@@ -81,7 +81,7 @@ public class HpoOboIndexer {
             if (line.isEmpty()) {
 
                 idField = new StringField("hp_id", hp_id, Field.Store.YES);
-                nameField = new StringField("name", name, Field.Store.YES);
+                nameField = new StringField("name", name.toLowerCase(), Field.Store.YES);
                 for (String cuiCode : cui_codes) {
                     Document doc = new Document();        
                     doc.add(idField);
@@ -106,7 +106,6 @@ public class HpoOboIndexer {
             count++;
         }
         writer.commit();
-        writer.close();
         reader.close();
     }
 
