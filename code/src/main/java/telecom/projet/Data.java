@@ -1,24 +1,21 @@
 package telecom.projet;
 
-import static telecom.projet.indexes.hpo.HpoOboResearcher.searchingSymptomByQuery;
-
-import static telecom.projet.indexes.omim.OmimResearcherCSV.searchingCuiOmim;
-import static telecom.projet.indexes.omim.OmimResearcherTXT.searchingDiseaseBySymptom;
+import static telecom.projet.indexes.drugbank.DrugbankResearcher.*;
+import static telecom.projet.indexes.hpo.HpoOboResearcher.*;
+import static telecom.projet.indexes.hpo.HpoOboResearcherForSynonym.*;
+import static telecom.projet.indexes.omim.OmimResearcherCSV.*;
+import static telecom.projet.indexes.omim.OmimResearcherTXT.*;
 import static telecom.projet.indexes.sider.MeddraResearcher.*;
-
+import static telecom.projet.indexes.stitch.ChemicalSourcesResearcher.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-
-import telecom.projet.model.*;
+import telecom.projet.model.Disease;
 import telecom.projet.model.Record;
-
-import static telecom.projet.indexes.hpo.HpoOboResearcherForSynonym.searchingSynonymsBySymptom;
-
-import static telecom.projet.indexes.drugbank.DrugbankResearcher.getTreatmentByATC;
-import static telecom.projet.indexes.sider.MeddraResearcher.getCIDbyCUI_meddra_all_indication;
-import static telecom.projet.indexes.stitch.ChemicalSourcesResearcher.getATCbyCID;
+import telecom.projet.model.SideEffect;
+import telecom.projet.model.Symptom;
+import telecom.projet.model.Treatment;
 
 public class Data {
 
@@ -38,14 +35,17 @@ public class Data {
          */
         query_symptom = query_symptom.toLowerCase();
         ArrayList<Record> records = new ArrayList<>();
-        if (query_symptom.contains(" AND ")) {
-            String[] symptoms = query_symptom.split(" AND ");
+        if (query_symptom.contains(" and ")) {
+            String[] symptoms = query_symptom.split(" and ");
+            System.out.println(symptoms.toString());
             records.addAll(run(symptoms[0], side_effect));
             for (int i = 1; i < symptoms.length; i++) {
                 records.retainAll(run(symptoms[i], side_effect));
             }
-        }else if (query_symptom.contains(" OR ")) {
-            String[] symptoms = query_symptom.split(" OR ");
+        }else if (query_symptom.contains(" or ")) {
+            
+            String[] symptoms = query_symptom.split(" or ");
+            System.out.println(symptoms.toString());
             for (String symptom : symptoms) {
                 records.addAll(run(symptom, side_effect));
             }
