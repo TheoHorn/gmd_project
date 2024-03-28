@@ -105,6 +105,10 @@ public class Controller {
         }
 
         diseaseBox.getChildren().get(0).setStyle("-fx-text-fill: gray; -fx-font-weight: bold;");
+        
+        if (side_effect){
+            diseaseBox.getChildren().add(new Label("Frequency: " + score));
+        }
         hboxLeft.getChildren().add(diseaseBox);
         
 
@@ -136,7 +140,6 @@ public class Controller {
         VBox vbox = new VBox();
         vbox.getChildren().add(new Label(treatment));
         vbox.getChildren().add(new Label("Data source: " + data_source));
-        vbox.getChildren().add(new Label("Score: " + score));
 
         //style for the name of the treatment
         vbox.getChildren().get(0).setStyle("-fx-text-fill: gray; -fx-font-weight: bold;");

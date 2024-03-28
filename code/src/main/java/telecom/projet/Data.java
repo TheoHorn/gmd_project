@@ -78,6 +78,7 @@ public class Data {
                 ArrayList<String> atc_codes = getATCbyCID(cid);
                 ArrayList<Treatment> treatments = getTreatmentByATC(atc_codes);
                 for (Treatment treatment : treatments) {
+
                     Record record = new Record(query, disease.getName(), treatment.getName(), "", 0);
                     records.add(record);
                 }
@@ -86,6 +87,8 @@ public class Data {
 
         return records;
     }
+
+    
 
     /**
      * Search the databases for the symptoms
@@ -105,7 +108,9 @@ public class Data {
                 for (Treatment cure : cure_treatments) {
                     for (Treatment bad : bad_treatments) {
                         //TODO : verify if they can be taken together
-                        Record record = new Record(query, bad.getName(), cure.getName(),"", 0);
+
+                        int score = getMeanFrequency(se.getCui(), se.getCid());
+                        Record record = new Record(query, bad.getName(), cure.getName(),"", score);
                         records.add(record);
                     }
                 }
@@ -147,4 +152,6 @@ public class Data {
         System.out.println("Records: " + this.records.size() + " found.");
         return this.records;
     }
+
+    
 }
