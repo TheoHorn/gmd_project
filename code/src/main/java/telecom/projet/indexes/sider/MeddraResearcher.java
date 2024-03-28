@@ -45,7 +45,7 @@ public class MeddraResearcher {
         ArrayList<Disease> diseases_with_cui = new ArrayList<Disease>();
         for (Disease disease : diseases) {
             ArrayList<String> cui_founds = search("indexes/sider/meddra",disease.getName(), "symptom", "cui");
-            if (cui_founds.size() > 0) {
+            if (!cui_founds.isEmpty()) {
                 disease.setCui_code(cui_founds.get(0));
                 diseases_with_cui.add(disease);
             }
@@ -153,9 +153,8 @@ public class MeddraResearcher {
     }
 
     public static ArrayList<String> search(String indexDirectoryPath, String querystr, String type_of_query, String type_of_result) throws IOException {
+        ArrayList<String> result = new ArrayList<String>();
         try {
-            ArrayList<String> result = new ArrayList<String>();
-            
             //System.out.println("Searching for: " + querystr);
             Directory indexDirectory = FSDirectory.open(Paths.get(indexDirectoryPath));
             IndexReader reader = DirectoryReader.open(indexDirectory);
@@ -178,10 +177,9 @@ public class MeddraResearcher {
                 }    
             }
             reader.close();
-            return result;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return result;
     }
 }

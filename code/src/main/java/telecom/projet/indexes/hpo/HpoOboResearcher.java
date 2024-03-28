@@ -63,7 +63,7 @@ public class HpoOboResearcher {
     }
 
     public static void main(String[] args) throws IOException {
-        ArrayList<Symptom> ss = searchingIndexObo("name", "Abnormality of the temporomandibular joint");
+        ArrayList<Symptom> ss = searchingIndexObo("name", "anaemia");
         //ArrayList<Disease> diseases = searchingIndexObo("name", "Cutaneous myxoma");
         //ArrayList<Disease> diseases = searchingIndexObo("hp_id", "HP:0030431");
         for (Symptom symptom : ss) {

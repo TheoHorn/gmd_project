@@ -89,7 +89,7 @@ public class HpoOboIndexerForSynonym {
                     doc.add(idField);
                     doc.add(nameField);
                     doc.add(cuiCodeField);
-                    doc.add(new StringField("synonym", synonymOf, Field.Store.YES));
+                    doc.add(new StringField("synonym", synonymOf.toLowerCase(), Field.Store.YES));
                     try {
                         writer.addDocument(doc);
                     } catch (IOException e) {
@@ -120,7 +120,6 @@ public class HpoOboIndexerForSynonym {
             count++;
         }
         writer.commit();
-        writer.close();
         reader.close();
     }
 

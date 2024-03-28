@@ -106,7 +106,6 @@ public class HpoOboIndexer {
             count++;
         }
         writer.commit();
-        writer.close();
         reader.close();
     }
 

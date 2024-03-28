@@ -36,21 +36,22 @@ public class Data {
          * @param: symptoms: the symptoms to search for
          * @param: side_effect: if true, search for side effects too
          */
-        query_symptom = query_symptom.toLowerCase();
+        query_symptom = query_symptom.toLowerCase().trim();
         ArrayList<Record> records = new ArrayList<>();
-        if (query_symptom.contains(" AND ")) {
-            String[] symptoms = query_symptom.split(" AND ");
+        if (query_symptom.contains(" and ")) {
+            String[] symptoms = query_symptom.split(" and ");
             records.addAll(run(symptoms[0], side_effect));
             for (int i = 1; i < symptoms.length; i++) {
                 records.retainAll(run(symptoms[i], side_effect));
             }
-        }else if (query_symptom.contains(" OR ")) {
-            String[] symptoms = query_symptom.split(" OR ");
+        }else if (query_symptom.contains(" or ")) {
+            String[] symptoms = query_symptom.split(" or ");
             for (String symptom : symptoms) {
                 records.addAll(run(symptom, side_effect));
             }
         }else{
             ArrayList<String> symptoms = searchingSynonymsBySymptom(query_symptom);
+            symptoms.add(query_symptom);
             for (String symptom : symptoms) {
                 if (side_effect) {
                     records.addAll(searchSideEffect(symptom.toLowerCase()));
@@ -146,6 +147,7 @@ public class Data {
 
     public ArrayList<Record> getRecords() {
         orderingByScore();
+        System.out.println("Records: " + this.records.size() + " found.");
         return this.records;
     }
 }

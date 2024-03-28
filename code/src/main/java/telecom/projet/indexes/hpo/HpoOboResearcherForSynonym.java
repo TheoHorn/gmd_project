@@ -13,13 +13,26 @@ import telecom.projet.model.Symptom;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class HpoOboResearcherForSynonym {
 
     public static ArrayList<String> searchingSynonymsBySymptom(String query_symptoms) throws IOException {
-        return searchingIndexObo("name", query_symptoms);
-        
+        ArrayList<Symptom> symptoms = searchingIndexObo("synonym", query_symptoms);
+        Set<String> uniqueSynonyms = new HashSet<>();
+
+        for (Symptom symptom : symptoms) {
+            ArrayList<Symptom> s = searchingIndexObo("name", symptom.getName());
+            for (Symptom s1 : s) {
+                uniqueSynonyms.addAll(s1.getSynonyms());
+            }
+
+            uniqueSynonyms.add(symptom.getName());
+            uniqueSynonyms.addAll(symptom.getSynonyms());
+        }
+        return new ArrayList<>(uniqueSynonyms);
     }
 
 
@@ -30,7 +43,7 @@ public class HpoOboResearcherForSynonym {
      * @return an ArrayList of the diseases found
      * @throws IOException if there is an error while reading the index
      */
-    public static ArrayList<String> searchingIndexObo(String field_to_research, String query) throws IOException {
+    public static ArrayList<Symptom> searchingIndexObo(String field_to_research, String query) throws IOException {
         String index_directory = "indexes/hpo_obo_syn";
         SimpleFSDirectory directory = new SimpleFSDirectory(Path.of(index_directory));
         IndexReader reader = DirectoryReader.open(directory);
@@ -55,23 +68,12 @@ public class HpoOboResearcherForSynonym {
             String synonym = doc.get("synonym");
             symptoms.add(new Symptom(name, synonym, cui_code, hp_id));
         }
-        ArrayList<String> synonyms = new ArrayList<>();
-        String name = "";
-        for (Symptom Symptom : symptoms) {
-            synonyms.add(Symptom.getSynonyms().get(0));
-        }
-        return synonyms;
 
+        return symptoms;
     }
 
     public static void main(String[] args) throws IOException {
-        ArrayList<String> synonyms = searchingIndexObo("name", "fever");
-        //ArrayList<Disease> diseases = searchingIndexObo("name", "Cutaneous myxoma");
-        //ArrayList<Disease> diseases = searchingIndexObo("hp_id", "HP:0030431");
-        for (String synonym : synonyms){
-            System.out.println(synonym+" ");
-        }
-        System.out.println("END");
+        System.out.println(searchingSynonymsBySymptom("fever"));
     }
 }
 
