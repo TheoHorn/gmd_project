@@ -161,7 +161,13 @@ public class MeddraResearcher {
             IndexSearcher searcher = new IndexSearcher(reader);
             StandardAnalyzer analyzer = new StandardAnalyzer();
             QueryParser parser = new QueryParser(type_of_query, analyzer);
-            Query query = parser.parse(querystr);
+            Query query;
+            if (!querystr.isEmpty()){
+               query = parser.parse(querystr);
+            }else{
+                return result;
+            }
+
 
             int maxHitsPerPage = 1000; // Maximum number of hits per page
             TopDocs results = searcher.search(query, maxHitsPerPage);
