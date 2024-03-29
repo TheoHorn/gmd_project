@@ -34,7 +34,7 @@ public class HpoOboResearcher {
     //    return searchingIndexObo("name", query_regex);
     //}
 
-    
+
     /**
      * Search the index for a specific field and query with regexp
      * @param field_to_research, the field to search in the index
@@ -48,11 +48,11 @@ public class HpoOboResearcher {
         SimpleFSDirectory directory = new SimpleFSDirectory(Path.of(index_directory));
         IndexReader reader = DirectoryReader.open(directory);
         IndexSearcher searcher = new IndexSearcher(reader);
-    
+
         RegexpQuery query = new RegexpQuery(new Term(field_to_research, regex));
-    
+
         TopDocs topDocs = searcher.search(query, 10000);
-    
+
         ArrayList<Symptom> symptoms = new ArrayList<>();
         for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
             Document doc = searcher.doc(scoreDoc.doc);
@@ -84,7 +84,7 @@ public class HpoOboResearcher {
         TopDocs topDocs;
         TermQuery termQuery = new TermQuery(new Term(field_to_research, query));
         topDocs = searcher.search(termQuery, 10000);
-        
+
 
 
         ArrayList<Symptom> symptoms = new ArrayList<>();
@@ -105,15 +105,14 @@ public class HpoOboResearcher {
     }
 
     public static void main(String[] args) throws IOException {
-        ArrayList<Symptom> ss = searchingIndexOboRegex("name", "leukoencephalopathy");
+        //ArrayList<Symptom> ss = searchingIndexOboRegex("name", "leukoencephalopathy");
         System.out.println("Size of symptoms : ");
-        System.out.println(ss.size());
         //ArrayList<Disease> diseases = searchingIndexObo("name", "Cutaneous myxoma");
-        //ArrayList<Disease> diseases = searchingIndexObo("hp_id", "HP:0030431");
+        ArrayList<Symptom> ss = searchingIndexObo("hp_id", "HP:0030431");
         ArrayList<Symptom> ss2 = searchingIndexOboRegex("name", ".*pain.*");
         ArrayList<Symptom> ss3 = searchingIndexOboRegex("name", "[a-z]{4}");
         for (Symptom symptom : ss) {
-            System.out.println(symptom.getName());
+            System.out.println(symptom.getName() + " " + symptom.getCui_code() + " " + symptom.getHp_code());
         }
     }
 }

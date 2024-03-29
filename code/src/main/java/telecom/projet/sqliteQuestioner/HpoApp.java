@@ -1,11 +1,16 @@
 package telecom.projet.sqliteQuestioner;
 
+import telecom.projet.model.Disease;
+import telecom.projet.model.Symptom;
+
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
 
 
 public class HpoApp {
@@ -46,10 +51,52 @@ public class HpoApp {
         }
     }
 
-      /**
-     * Get the desease label from a HP_id
-     * @param HP_id
-     */
+    public ArrayList<Disease> searchingDiseaseBySymptom(ArrayList<Symptom> possibleSymptoms) {
+        ArrayList<Disease> diseases = new ArrayList<>();
+        for (Symptom symptom : possibleSymptoms) {
+            diseases.addAll(getDiseaseFromSymptom(symptom));
+        }
+        return diseases;
+    }
+
+    public ArrayList<Disease> getDiseaseFromSymptom(Symptom symptom){
+        String sql = "SELECT disease_label "
+                + "FROM phenotype_annotation "
+                +  "WHERE sign_id = ?";
+        ArrayList<Disease> diseases = new ArrayList<>();
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+
+            // setting the value of the parameter
+            pstmt.setString(1,symptom.getHp_code());
+            //
+            ResultSet rs  = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String line = rs.getString("disease_label");
+                String[] parts = line.split(";;");
+                String name;
+
+                if (Character.isLetter(parts[0].charAt(0))) {
+                    name = parts[0].substring(parts[0].indexOf(' ') + 1);
+                }else{
+                    name = parts[0];
+                }
+                name = name.replace("\\", " ");
+                name = name.replace("/", " ");
+                Disease disease = new Disease();
+                disease.setName(name);
+                disease.setHp_code(symptom.getHp_code());
+                disease.setCui_code(symptom.getCui_code());
+                diseases.add(disease);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return diseases;
+    }
+
     public void getDiseaseLabelFromHP_id(String HP_id){
                String sql = "SELECT disease_label "
                           + "FROM phenotype_annotation "
@@ -97,7 +144,8 @@ public class HpoApp {
         HpoApp app = new HpoApp();
         //app.listTables();
         //app.selectAll();
-        app.getDiseaseLabelFromHP_id("HP:0010754");
+        app.getDiseaseLabelFromHP_id("HP:0000007");
     }
+
 
 }

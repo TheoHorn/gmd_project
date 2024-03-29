@@ -56,6 +56,7 @@ public class Controller {
                         records.get(i).setTreatment(records.get(i).getTreatment().replace("\n", " ").replace("\r", " ").replace("\t", " ").replace("  ", " "));
                         //suppress the \n, \r, \t and double spaces in problem
                         records.get(i).setProblem(records.get(i).getProblem().replace("\n", " ").replace("\r", " ").replace("\t", " ").replace("  ", " "));
+                        
                         treatments.add(records.get(i).getTreatment());
                         vbox.getChildren().add(line_of_infos(records.get(i).getSymptom(),records.get(i).getProblem(), treatments, checkbox.isSelected(), records.get(i).getData_source(), records.get(i).getScore()));
                         treatments = new ArrayList<>();
@@ -73,7 +74,6 @@ public class Controller {
                     //suppress the \n, \r, \t and double spaces in problem
                     records.get(i).setProblem(records.get(i).getProblem().replace("\n", " ").replace("\r", " ").replace("\t", " ").replace("  ", " "));
                         
-                    //System.out.println("problem: "+problem + " //" + treatments);
                     if (problem == ""){
                         problem = records.get(i).getProblem();
                         treatments.add(records.get(i).getTreatment());
@@ -137,6 +137,11 @@ public class Controller {
 
         }
         diseaseBox.getChildren().add(new Label(problem + " (" + symptom + ")"));
+
+        //display score if checkbox not selected
+        if (!side_effect){
+            diseaseBox.getChildren().add(new Label("Score: " + score));
+        }
         
         //wrap text for the children of diseaseBox
         for (int i = 0; i < diseaseBox.getChildren().size(); i++){
