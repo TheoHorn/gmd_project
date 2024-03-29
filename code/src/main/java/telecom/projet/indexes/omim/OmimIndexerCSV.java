@@ -71,9 +71,9 @@ public class OmimIndexerCSV {
                 String[] parts = fields[0].split("/");
                 fields[0] = parts[parts.length - 1];
                 doc.add(new StringField("omim_id", fields[0], Field.Store.YES));
-                doc.add(new TextField("name", fields[1], Field.Store.YES));
+                doc.add(new TextField("name", fields[1].toLowerCase(), Field.Store.YES));
                 if (!fields[2].isEmpty()){
-                    doc.add(new TextField("synonyms", fields[2], Field.Store.NO));
+                    doc.add(new TextField("synonyms", fields[2].toLowerCase(), Field.Store.NO));
                 }
                 if (fields.length > 5 && !fields[5].isEmpty()){
                     doc.add(new StringField("cui",fields[5],Field.Store.YES));

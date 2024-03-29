@@ -82,14 +82,14 @@ public class HpoOboIndexerForSynonym {
             if (line.isEmpty()) {
 
                 idField = new StringField("hp_id", hp_id, Field.Store.YES);
-                nameField = new StringField("name", name, Field.Store.YES);
+                nameField = new StringField("name", name.toLowerCase(), Field.Store.YES);
                 cuiCodeField = new StringField("cui_code", cui_code, Field.Store.YES);
                 for (String synonymOf : synonyms) {
                     Document doc = new Document();        
                     doc.add(idField);
                     doc.add(nameField);
                     doc.add(cuiCodeField);
-                    doc.add(new StringField("synonym", synonymOf, Field.Store.YES));
+                    doc.add(new StringField("synonym", synonymOf.toLowerCase(), Field.Store.YES));
                     try {
                         writer.addDocument(doc);
                     } catch (IOException e) {
@@ -120,7 +120,6 @@ public class HpoOboIndexerForSynonym {
             count++;
         }
         writer.commit();
-        writer.close();
         reader.close();
     }
 

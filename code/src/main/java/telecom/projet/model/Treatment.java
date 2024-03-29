@@ -38,4 +38,14 @@ public class Treatment {
     public void setDatabase(String database) {
         this.database = database;
     }
+
+    @Override
+    public String toString() {
+        return "Treatment{" +
+                "name='" + name + '\'' +
+                ", atc_code='" + atc_code + '\'' +
+                ", drugbank_id='" + drugbank_id + '\'' +
+                ", database='" + database + '\'' +
+                '}';
+    }
 }

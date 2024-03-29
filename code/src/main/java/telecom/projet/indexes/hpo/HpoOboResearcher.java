@@ -8,6 +8,7 @@ import org.apache.lucene.search.*;
 import org.apache.lucene.store.SimpleFSDirectory;
 
 import telecom.projet.model.Disease;
+import telecom.projet.model.Symptom;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -17,12 +18,12 @@ import java.util.ArrayList;
 public class HpoOboResearcher {
 
 
-    public static ArrayList<Disease> searchingDiseaseBySymptom(String query_symptoms) throws IOException {
+    public static ArrayList<Symptom> searchingSymptomByQuery(String query_symptoms) throws IOException {
         return searchingIndexObo("name", query_symptoms);
     }
 
-    public static ArrayList<Disease> searchingDiseaseBySymptom(ArrayList<String> query_symptoms) throws IOException {
-        ArrayList<Disease> diseases = new ArrayList<>();
+    public static ArrayList<Symptom> searchingSymptomByQuery(ArrayList<String> query_symptoms) throws IOException {
+        ArrayList<Symptom> diseases = new ArrayList<>();
         for (String query_symptom : query_symptoms) {
             diseases.addAll(searchingIndexObo("name", query_symptom));
         }
@@ -35,7 +36,7 @@ public class HpoOboResearcher {
      * @return an ArrayList of the diseases found
      * @throws IOException if there is an error while reading the index
      */
-    public static ArrayList<Disease> searchingIndexObo(String field_to_research, String query) throws IOException {
+    public static ArrayList<Symptom> searchingIndexObo(String field_to_research, String query) throws IOException {
         String index_directory = "indexes/hpo_obo";
         SimpleFSDirectory directory = new SimpleFSDirectory(Path.of(index_directory));
         IndexReader reader = DirectoryReader.open(directory);
@@ -46,23 +47,27 @@ public class HpoOboResearcher {
         topDocs = searcher.search(termQuery, 10000);
 
 
-        ArrayList<Disease> diseases = new ArrayList<>();
+        ArrayList<Symptom> symptoms = new ArrayList<>();
         for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
             Document doc = searcher.doc(scoreDoc.doc);
             String name = doc.get("name");
             String cui_code = doc.get("cui_code");
             String hp_id = doc.get("hp_id");
-            diseases.add(new Disease(name, cui_code, hp_id));
+            Symptom symptom = new Symptom();
+            symptom.setCui_code(cui_code);
+            symptom.setHp_code(hp_id);
+            symptom.setName(name);
+            symptoms.add(symptom);
         }
-        return diseases;
+        return symptoms;
     }
 
     public static void main(String[] args) throws IOException {
-        ArrayList<Disease> diseases = searchingIndexObo("name", "Abnormality of the temporomandibular joint");
+        ArrayList<Symptom> ss = searchingIndexObo("name", "anaemia");
         //ArrayList<Disease> diseases = searchingIndexObo("name", "Cutaneous myxoma");
         //ArrayList<Disease> diseases = searchingIndexObo("hp_id", "HP:0030431");
-        for (Disease Disease : diseases) {
-            System.out.println(Disease.getName()+" "+Disease.getCui_code()+" "+Disease.getHp_code());
+        for (Symptom symptom : ss) {
+            System.out.println(symptom.getName());
         }
     }
 }

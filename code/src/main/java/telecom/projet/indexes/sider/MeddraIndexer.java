@@ -22,17 +22,17 @@ public class MeddraIndexer {
     
     public static void runIndexing() {
         
-        String tsvFilePath = "data/SIDER/meddra_all_indications.tsv";
+        // String tsvFilePath = "data/SIDER/meddra_all_indications.tsv";
+        // indexTSV(tsvFilePath);
+
+        // tsvFilePath = "data/SIDER/meddra_all_se.tsv";
+        // indexTSV(tsvFilePath);
+
+        String tsvFilePath = "data/SIDER/meddra_freq.tsv";
         indexTSV(tsvFilePath);
 
-        tsvFilePath = "data/SIDER/meddra_all_se.tsv";
-        indexTSV(tsvFilePath);
-
-        tsvFilePath = "data/SIDER/meddra_freq.tsv";
-        indexTSV(tsvFilePath);
-
-        tsvFilePath = "data/SIDER/meddra.tsv";
-        indexTSV(tsvFilePath);
+        // tsvFilePath = "data/SIDER/meddra.tsv";
+        // indexTSV(tsvFilePath);
     }
 
     public static void indexTSV(String tsvFilePath) {
@@ -122,7 +122,7 @@ public class MeddraIndexer {
         if ("LLT".equals(fields[4])){
             stitch_id = new TextField("stitch_id", fields[0], Field.Store.YES);
             umls = new TextField("umls", fields[1], Field.Store.YES);
-            indication = new TextField("indication", fields[3], Field.Store.YES);
+            indication = new TextField("indication", fields[3].toLowerCase(), Field.Store.YES);
 
             doc.add(stitch_id);
             doc.add(umls);
@@ -163,7 +163,7 @@ public class MeddraIndexer {
         //[9]: side effect
         TextField stitch_id, umls, side_effect, frequency;
 
-        if ("LLT".equals(fields[7])){
+        if ("LLT".equals(fields[7]) && !"placebo".equals(fields[3])){
             stitch_id = new TextField("stitch_id", fields[0], Field.Store.YES);
             umls = new TextField("umls", fields[2], Field.Store.YES);
             frequency = new TextField("frequency", fields[4], Field.Store.YES);
@@ -186,8 +186,8 @@ public class MeddraIndexer {
         TextField umls, side_effect;
 
         if ("LT".equals(fields[1])){
-            umls = new TextField("umls", fields[0], Field.Store.YES);
-            side_effect = new TextField("side_effect", fields[3], Field.Store.YES);
+            umls = new TextField("cui", fields[0], Field.Store.YES);
+            side_effect = new TextField("symptom", fields[3], Field.Store.YES);
             doc.add(umls);
             doc.add(side_effect);
         }

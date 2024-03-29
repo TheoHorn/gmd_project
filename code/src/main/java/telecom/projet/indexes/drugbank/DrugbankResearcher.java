@@ -19,30 +19,6 @@ public class DrugbankResearcher {
 
 
     /**
-     * Get the disease by the symptoms
-     * @param query_symptoms the symptoms to search for
-     * @return an ArrayList of the drugs found
-     * @throws IOException if there is an error while reading the index
-     */
-    public static ArrayList<Disease> getDiseaseBySymptom(String query_symptoms) throws IOException {
-        return searchingForDisease("indication", query_symptoms);
-    }
-
-    /**
-     * Get the disease by the symptoms
-     * @param query_symptoms the symptoms to search for
-     * @return an ArrayList of the drugs found
-     * @throws IOException if there is an error while reading the index
-     */
-    public static ArrayList<Disease> getDiseaseBySymptom(ArrayList<String> query_symptoms) throws IOException {
-        ArrayList<Disease> diseases = new ArrayList<>();
-        for (String query_symptom : query_symptoms) {
-            diseases.addAll(searchingForDisease("indication", query_symptom));
-        }
-        return diseases;
-    }
-
-    /**
      * Get the treatment by the atc code
      * @param query_atc_code the atc code to search for
      * @return an ArrayList of the drugs found
@@ -126,9 +102,6 @@ public class DrugbankResearcher {
         IndexReader reader = DirectoryReader.open(directory);
         IndexSearcher searcher = new IndexSearcher(reader);
 
-        //BooleanQuery.Builder bool_query = new BooleanQuery.Builder(); -> will be useful for multiple fields
-        //PhraseQuery phrase_query = new PhraseQuery(); -> will be useful for multiple words in query
-        //TopDocsCollector, TopScoreDocCollector -> will be useful for sorting ? 
         TopDocs topDocs;
         if (query.contains(" ")) {
             String[] words = query.split(" ");
@@ -138,10 +111,10 @@ public class DrugbankResearcher {
             }
             PhraseQuery phrase_query = builder.build();
             Term[] terms = phrase_query.getTerms();
-            topDocs = searcher.search(phrase_query, 10);
+            topDocs = searcher.search(phrase_query, 100);
         }else{
             TermQuery term_query = new TermQuery(new Term(field_to_research, query));
-            topDocs = searcher.search(term_query, 10);
+            topDocs = searcher.search(term_query, 100);
         }
 
         ArrayList<Treatment> treatments = new ArrayList<>();
@@ -160,6 +133,9 @@ public class DrugbankResearcher {
     }
 
     public static void main(String[] args) throws IOException {
-        searchingForTreatment("atc_code", "DB00770");
+        ArrayList<Disease> Diseases = searchingForDisease("atc_code", "J01BA01");
+        for (Disease disease : Diseases) {
+            System.out.println(disease);
+        }
     }
 }

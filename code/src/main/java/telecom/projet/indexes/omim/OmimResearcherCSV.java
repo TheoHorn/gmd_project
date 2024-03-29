@@ -17,6 +17,19 @@ import org.apache.lucene.store.SimpleFSDirectory;
 import telecom.projet.model.Disease;
 
 public class OmimResearcherCSV {
+
+    public static ArrayList<Disease> searchingCuiOmim(ArrayList<Disease> diseases) throws IOException {
+        ArrayList<Disease> diseases_with_cui = new ArrayList<>();
+        for (Disease disease : diseases) {
+            ArrayList<Disease> diseases_found = searchingIndex("cui_code", disease.getCui_code());
+            if (diseases_found.size() > 0) {
+                Disease disease_found = diseases_found.get(0);
+                disease.setCui_code(disease_found.getCui_code());
+                diseases_with_cui.add(disease);
+            }
+        }
+        return diseases_with_cui;
+    }
     public static ArrayList<Disease> searchingIndex(String field_to_research, String query) throws IOException {
         String index_directory = "indexes/omimcsv";
         SimpleFSDirectory directory = new SimpleFSDirectory(Path.of(index_directory));
@@ -42,7 +55,7 @@ public class OmimResearcherCSV {
 
     public static void main(String[] args) {
         try {
-            ArrayList<Disease> Diseases = searchingIndex("cui", "C1412749");
+            ArrayList<Disease> Diseases = searchingIndex("", "C1412749");
             for (Disease Disease : Diseases) {
                 System.out.println(Disease);
             }
