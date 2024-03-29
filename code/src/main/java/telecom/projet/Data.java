@@ -57,7 +57,9 @@ public class Data {
                 }
             }
         }
-        return recordsCleaning(records);
+        records = recordsCleaning(records, side_effect);
+        orderingByScore();
+        return records;
     }
 
     /**
@@ -131,13 +133,23 @@ public class Data {
         return diseases;
     }
 
-    private ArrayList<Record> recordsCleaning(ArrayList<Record> records) {
+    private ArrayList<Record> recordsCleaning(ArrayList<Record> records, Boolean side_effect) {
         /* Remove the duplicates in the records
          */
         ArrayList<Record> records_cleaned = new ArrayList<>();
         for (Record record : records) {
+            
             if (!records_cleaned.contains(record)) {
                 records_cleaned.add(record);
+            }else{
+                if (!side_effect){
+                    for (Record r : records_cleaned) {
+                        if (r.equals(record)){
+                            r.setScore(r.getScore() + 1);
+                            break;
+                        }
+                    }
+                }
             }
         }
         return records_cleaned;
