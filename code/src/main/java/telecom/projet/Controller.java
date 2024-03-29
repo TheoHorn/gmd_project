@@ -145,7 +145,7 @@ public class Controller {
 
         diseaseBox.getChildren().get(0).setStyle("-fx-text-fill: gray; -fx-font-weight: bold;");
         
-        if (side_effect){
+        if (side_effect && score != 0){
             diseaseBox.getChildren().add(new Label("Frequency: " + score + "%"));
         }
         hboxLeft.getChildren().add(diseaseBox);
