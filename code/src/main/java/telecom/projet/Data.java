@@ -85,7 +85,7 @@ public class Data {
                 ArrayList<Treatment> treatments = getTreatmentByATC(atc_codes);
                 for (Treatment treatment : treatments) {
 
-                    Record record = new Record(query, disease.getName(), treatment.getName(), "", 0);
+                    Record record = new Record(query, disease.getName().trim(), treatment.getName().trim(), "", 0);
                     records.add(record);
                 }
             }
