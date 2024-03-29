@@ -50,7 +50,7 @@ public class Symptom {
         return hp_code;
     }
 
-    public void setHp_code(String cui_code) {
+    public void setHp_code(String hp_code) {
         this.hp_code = hp_code;
     }
 

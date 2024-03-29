@@ -16,6 +16,7 @@ import telecom.projet.model.Record;
 import telecom.projet.model.SideEffect;
 import telecom.projet.model.Symptom;
 import telecom.projet.model.Treatment;
+import telecom.projet.sqliteQuestioner.HpoApp;
 
 public class Data {
 
@@ -68,9 +69,14 @@ public class Data {
      * @return an ArrayList of the records found
      */
     public ArrayList<Record> searchDisease(String query) throws IOException {
+        HpoApp hpoApp = new HpoApp();
         ArrayList<Record> records = new ArrayList<>();
         ArrayList<Symptom> possible_symptoms = searchingSymptomByQuery(query);
+
+
         ArrayList<Disease> diseases_possible = searchingDiseaseBySymptom(possible_symptoms);
+        diseases_possible.addAll(hpoApp.searchingDiseaseBySymptom(possible_symptoms));
+
         ArrayList<Disease> diseases_searchable = searchingCuiOmim(diseases_possible);
         diseases_searchable.addAll(searchingCuiMeddra(diseases_possible));
         diseases_possible.addAll(symptomsToDisease(possible_symptoms));
@@ -81,7 +87,7 @@ public class Data {
                 ArrayList<Treatment> treatments = getTreatmentByATC(atc_codes);
                 for (Treatment treatment : treatments) {
 
-                    Record record = new Record(query, disease.getName(), treatment.getName(), "", 0);
+                    Record record = new Record(query, disease.getName().trim(), treatment.getName().trim(), "", 0);
                     records.add(record);
                 }
             }
