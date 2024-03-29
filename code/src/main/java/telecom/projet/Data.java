@@ -58,9 +58,7 @@ public class Data {
                 }
             }
         }
-        records = recordsCleaning(records, side_effect);
-        orderingByScore();
-        return records;
+        return recordsCleaning(records, side_effect);
     }
 
     /**
