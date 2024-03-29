@@ -46,8 +46,8 @@ public class Controller {
             records = data.getRecords();
 
             ArrayList<String> treatments = new ArrayList<>();
+            int max = 500;
             if (checkbox.isSelected()){
-                int max = 100;
                 if (records.size() < max){
                     max = records.size();
                 }
@@ -63,7 +63,6 @@ public class Controller {
                     }
                 
             }else{
-                int max = 100;
                 if (records.size() < max){
                     max = records.size();
                 }
@@ -80,7 +79,9 @@ public class Controller {
                         
                     }
                     else if (problem.equals(records.get(i).getProblem())){
-                        treatments.add(records.get(i).getTreatment());
+                        if (!treatments.contains(records.get(i).getTreatment())){
+                            treatments.add(records.get(i).getTreatment());
+                        }
                     }
                     else{
                         vbox.getChildren().add(line_of_infos(records.get(i-1).getSymptom(),problem, treatments, checkbox.isSelected(), records.get(i-1).getData_source(), records.get(i-1).getScore()));

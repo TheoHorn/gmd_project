@@ -54,7 +54,7 @@ public class Record {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Record record = (Record) o;
-        return Objects.equals(symptom, record.symptom) && Objects.equals(problem, record.problem) && Objects.equals(treatment, record.treatment) && Objects.equals(data_source, record.data_source);
+        return Objects.equals(symptom, record.symptom) && Objects.equals(problem, record.problem) && Objects.equals(treatment, record.treatment);
     }
 
     @Override

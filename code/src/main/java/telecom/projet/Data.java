@@ -87,7 +87,7 @@ public class Data {
                 ArrayList<Treatment> treatments = getTreatmentByATC(atc_codes);
                 for (Treatment treatment : treatments) {
 
-                    Record record = new Record(query, disease.getName().trim(), treatment.getName().trim(), disease.getFind_in(), 0);
+                    Record record = new Record(query, disease.getName().trim(), treatment.getName().trim(), disease.getFind_in(), 1);
                     records.add(record);
                 }
             }
@@ -145,22 +145,18 @@ public class Data {
          */
         HashMap <String, Integer> scores = new HashMap<>();
         ArrayList<Record> records_cleaned = new ArrayList<>();
-        for (Record record : records) {
-            if (!records_cleaned.contains(record)) {
-                records_cleaned.add(record);
-                if (scores.containsKey(record.getProblem())) {
-                    scores.put(record.getProblem(), scores.get(record.getProblem()) + 1);
-                }else{
-                    scores.put(record.getProblem(), 1);
-                }
+        for (Record r : records){
+            if (scores.containsKey(r.getProblem())){
+                scores.put(r.getProblem(), scores.get(r.getProblem()) + r.getScore());
             }else{
-                if (!side_effect){
-                    scores.put(record.getProblem(), scores.get(record.getProblem()) + 1);
-                }
+                scores.put(r.getProblem(), r.getScore());
+            }
+            if (!records_cleaned.contains(r)) {
+                records_cleaned.add(r);
             }
         }
-        for (Record record : records_cleaned) {
-            record.setScore(scores.get(record.getProblem()));
+        for (Record r : records_cleaned){
+            r.setScore(scores.get(r.getProblem()));
         }
         return records_cleaned;
     }

@@ -14,8 +14,6 @@ public class Disease {
 
     private String hp_id;
 
-    private int score;
-
     private String find_in;
 
     public Disease(String name, String cui_code, String hp_code) {
@@ -83,13 +81,6 @@ public class Disease {
         this.omim_code = omim_code;
     }
 
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
 
     public String getFind_in() {
         return find_in;
