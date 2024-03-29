@@ -10,6 +10,9 @@ import static telecom.projet.indexes.stitch.ChemicalSourcesResearcher.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import telecom.projet.model.Disease;
 import telecom.projet.model.Record;
@@ -140,17 +143,24 @@ public class Data {
     private ArrayList<Record> recordsCleaning(ArrayList<Record> records, Boolean side_effect) {
         /* Remove the duplicates in the records
          */
+        HashMap <String, Integer> scores = new HashMap<>();
         ArrayList<Record> records_cleaned = new ArrayList<>();
         for (Record record : records) {
             if (!records_cleaned.contains(record)) {
                 records_cleaned.add(record);
+                if (scores.containsKey(record.getProblem())) {
+                    scores.put(record.getProblem(), scores.get(record.getProblem()) + 1);
+                }else{
+                    scores.put(record.getProblem(), 1);
+                }
             }else{
                 if (!side_effect){
-                    int index = records_cleaned.indexOf(record);
-                    int score = records_cleaned.get(index).getScore();
-                    records_cleaned.get(index).setScore(score + 1);
+                    scores.put(record.getProblem(), scores.get(record.getProblem()) + 1);
                 }
             }
+        }
+        for (Record record : records_cleaned) {
+            record.setScore(scores.get(record.getProblem()));
         }
         return records_cleaned;
     }
