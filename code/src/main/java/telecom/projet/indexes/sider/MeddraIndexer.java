@@ -114,7 +114,7 @@ public class MeddraIndexer {
     
         Document doc = new Document();
         //[0]: stitch_id (C........)
-        //[1]: umls/CID
+        //[1]: umls/CUI
         //[3]: indications
         TextField stitch_id, umls;
         TextField indication;

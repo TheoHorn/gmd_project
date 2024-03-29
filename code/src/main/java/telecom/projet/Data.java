@@ -146,11 +146,9 @@ public class Data {
                 records_cleaned.add(record);
             }else{
                 if (!side_effect){
-                    for (Record record_cleaned : records_cleaned) {
-                        if (record_cleaned.equals(record)){
-                            record_cleaned.setScore(record_cleaned.getScore() + 1);
-                        }
-                    }
+                    int index = records_cleaned.indexOf(record);
+                    int score = records_cleaned.get(index).getScore();
+                    records_cleaned.get(index).setScore(score + 1);
                 }
             }
         }
