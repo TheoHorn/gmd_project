@@ -32,9 +32,7 @@ public class Controller {
 
     private ArrayList<Record> records = new ArrayList<>();
 
-    public Controller() {
-
-    }
+    public Controller() {}
 
     @FXML
     public void search() throws IOException {
@@ -44,19 +42,59 @@ public class Controller {
         if (symptoms.getText().isEmpty()){
             query.setText("Please enter a symptom");
         }else{
-            //vbox.getChildren().clear();
-            //Data class with all the results
-            //if the checkbox is selected, search for side effects too
             data = new Data(symptoms.getText(), checkbox.isSelected());
             records = data.getRecords();
-            
-            //display the first 50 results
-            for (int i = 0; i < 50; i++){
-                if (i < records.size()){
-                    vbox.getChildren().add(line_of_infos(records.get(i).getSymptom(),records.get(i).getProblem(), records.get(i).getTreatment(), checkbox.isSelected(), records.get(i).getData_source(), records.get(i).getScore()));
+
+            ArrayList<String> treatments = new ArrayList<>();
+            if (checkbox.isSelected()){
+                int max = 100;
+                if (records.size() < max){
+                    max = records.size();
+                }
+                for (int i = 0; i < max; i++){
+                        //suppress the \n, \r, \t and double spaces in the treatment
+                        records.get(i).setTreatment(records.get(i).getTreatment().replace("\n", " ").replace("\r", " ").replace("\t", " ").replace("  ", " "));
+                        //suppress the \n, \r, \t and double spaces in problem
+                        records.get(i).setProblem(records.get(i).getProblem().replace("\n", " ").replace("\r", " ").replace("\t", " ").replace("  ", " "));
+                        treatments.add(records.get(i).getTreatment());
+                        vbox.getChildren().add(line_of_infos(records.get(i).getSymptom(),records.get(i).getProblem(), treatments, checkbox.isSelected(), records.get(i).getData_source(), records.get(i).getScore()));
+                        treatments = new ArrayList<>();
+                    }
+                
+            }else{
+                int max = 100;
+                if (records.size() < max){
+                    max = records.size();
+                }
+                String problem = "";
+                for (int i = 0; i < max; i++){
+                    //suppress the \n, \r, \t and double spaces in the treatment
+                    records.get(i).setTreatment(records.get(i).getTreatment().replace("\n", " ").replace("\r", " ").replace("\t", " ").replace("  ", " "));
+                    //suppress the \n, \r, \t and double spaces in problem
+                    records.get(i).setProblem(records.get(i).getProblem().replace("\n", " ").replace("\r", " ").replace("\t", " ").replace("  ", " "));
+                        
+                    //System.out.println("problem: "+problem + " //" + treatments);
+                    if (problem == ""){
+                        problem = records.get(i).getProblem();
+                        treatments.add(records.get(i).getTreatment());
+                        
+                    }
+                    else if (problem.equals(records.get(i).getProblem())){
+                        treatments.add(records.get(i).getTreatment());
+                    }
+                    else{
+                        vbox.getChildren().add(line_of_infos(records.get(i-1).getSymptom(),problem, treatments, checkbox.isSelected(), records.get(i-1).getData_source(), records.get(i-1).getScore()));
+                        
+                        problem = records.get(i).getProblem();
+                        treatments = new ArrayList<>();
+                        treatments.add(records.get(i).getTreatment());}
+                    if (i == max-1){
+                        vbox.getChildren().add(line_of_infos(records.get(i).getSymptom(),problem, treatments, checkbox.isSelected(), records.get(i).getData_source(), records.get(i).getScore()));
+                    }
+                    
                 }
             }
-            //display
+            
             results.setContent(vbox);
 
             query.setText("Symptoms: " + symptoms.getText()+ " ("+ records.size() +" results)"); //display the research made
@@ -64,7 +102,7 @@ public class Controller {
         }
     }
 
-    public BorderPane line_of_infos(String symptom, String problem, String treatment, Boolean side_effect, String data_source, int score){
+    public BorderPane line_of_infos(String symptom, String problem, ArrayList<String> treatment, Boolean side_effect, String data_source, int score){
         //side_effect = true if it's a side effect, false if it's a disease
 
         //return a BorderPane composed of:
@@ -139,21 +177,31 @@ public class Controller {
         
         //display the treatment and its details
         VBox vbox = new VBox();
-        vbox.getChildren().add(new Label(treatment));
-        vbox.getChildren().add(new Label("Data source: " + data_source));
+        for (int i = 0; i < treatment.size(); i++){
+            Label treatmentLabel = new Label(treatment.get(i));
+            treatmentLabel.setWrapText(true);
+            treatmentLabel.setStyle("-fx-padding: 0;");
+            vbox.getChildren().add(treatmentLabel);
+
+        }
+
+        // Style the VBox to remove spacing between lines of treatments
+        vbox.setStyle("-fx-spacing: 0;");
+
+        //vbox.getChildren().add(new Label(treatment));
+        //vbox.getChildren().add(new Label("Data source: " + data_source));
 
         //style for the name of the treatment
-        vbox.getChildren().get(0).setStyle("-fx-text-fill: gray; -fx-font-weight: bold;");
+        //vbox.getChildren().get(0).setStyle("-fx-text-fill: gray; -fx-font-weight: bold;");
         
-        //wrap text for the children of vbox
-        for (int i = 0; i < vbox.getChildren().size(); i++){
-            ((Label)vbox.getChildren().get(i)).setWrapText(true);
-        }
+        
+        //no spacing betwen lines
+        vbox.setStyle("-fx-spacing: 0; -fx-line-spacing: 0;");
 
         
         hboxRight.getChildren().add(vbox);
-        
-        //hbox.setStyle("-fx-background-color: #F0F8FF; -fx-border-radius: 30; -fx-padding: 10; -fx-spacing: 10;");
+
+        //style the right part
         hboxRight.setStyle("-fx-background-color: #C0EFA7;-fx-background-radius: 20;");
         borderPane.setRight(hboxRight);
         
