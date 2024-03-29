@@ -22,17 +22,17 @@ public class MeddraIndexer {
     
     public static void runIndexing() {
         
-        // String tsvFilePath = "data/SIDER/meddra_all_indications.tsv";
-        // indexTSV(tsvFilePath);
-
-        // tsvFilePath = "data/SIDER/meddra_all_se.tsv";
-        // indexTSV(tsvFilePath);
-
-        String tsvFilePath = "data/SIDER/meddra_freq.tsv";
+        String tsvFilePath = "data/SIDER/meddra_all_indications.tsv";
         indexTSV(tsvFilePath);
 
-        // tsvFilePath = "data/SIDER/meddra.tsv";
-        // indexTSV(tsvFilePath);
+        tsvFilePath = "data/SIDER/meddra_all_se.tsv";
+        indexTSV(tsvFilePath);
+
+        tsvFilePath = "data/SIDER/meddra_freq.tsv";
+        indexTSV(tsvFilePath);
+
+        tsvFilePath = "data/SIDER/meddra.tsv";
+        indexTSV(tsvFilePath);
     }
 
     public static void indexTSV(String tsvFilePath) {
