@@ -144,15 +144,13 @@ public class Data {
          */
         ArrayList<Record> records_cleaned = new ArrayList<>();
         for (Record record : records) {
-            
             if (!records_cleaned.contains(record)) {
                 records_cleaned.add(record);
             }else{
                 if (!side_effect){
-                    for (Record r : records_cleaned) {
-                        if (r.equals(record)){
-                            r.setScore(r.getScore() + 1);
-                            break;
+                    for (Record record_cleaned : records_cleaned) {
+                        if (record_cleaned.equals(record)){
+                            record_cleaned.setScore(record_cleaned.getScore() + 1);
                         }
                     }
                 }
