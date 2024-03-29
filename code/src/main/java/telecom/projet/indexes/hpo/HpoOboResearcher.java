@@ -63,11 +63,11 @@ public class HpoOboResearcher {
     }
 
     public static void main(String[] args) throws IOException {
-        ArrayList<Symptom> ss = searchingIndexObo("name", "anaemia");
+        //ArrayList<Symptom> ss = searchingIndexObo("name", "anaemia");
         //ArrayList<Disease> diseases = searchingIndexObo("name", "Cutaneous myxoma");
-        //ArrayList<Disease> diseases = searchingIndexObo("hp_id", "HP:0030431");
+        ArrayList<Symptom> ss = searchingIndexObo("hp_id", "HP:0030431");
         for (Symptom symptom : ss) {
-            System.out.println(symptom.getName());
+            System.out.println(symptom.getName() + " " + symptom.getCui_code() + " " + symptom.getHp_code());
         }
     }
 }
