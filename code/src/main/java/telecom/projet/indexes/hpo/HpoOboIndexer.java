@@ -81,6 +81,7 @@ public class HpoOboIndexer {
             if (line.isEmpty()) {
 
                 idField = new StringField("hp_id", hp_id, Field.Store.YES);
+                name = name.replace("/", " ");
                 nameField = new StringField("name", name.toLowerCase(), Field.Store.YES);
                 for (String cuiCode : cui_codes) {
                     Document doc = new Document();        

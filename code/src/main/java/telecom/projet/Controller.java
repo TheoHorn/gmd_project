@@ -141,6 +141,7 @@ public class Controller {
         //display score if checkbox not selected
         if (!side_effect){
             diseaseBox.getChildren().add(new Label("Score: " + score));
+            diseaseBox.getChildren().add(new Label("Data source: " + data_source));
         }
         
         //wrap text for the children of diseaseBox

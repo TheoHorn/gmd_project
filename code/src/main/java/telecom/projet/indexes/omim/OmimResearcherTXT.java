@@ -53,10 +53,11 @@ public class OmimResearcherTXT {
         for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
             Document doc = searcher.doc(scoreDoc.doc);
             String omim_id = doc.get("omim_id");
-            String name = doc.get("name");
+            String name = doc.get("name").replace("/", " ");
             Disease disease = new Disease();
             disease.setName(name);
             disease.setOmim_code(omim_id);
+            disease.setFind_in("OMIM");
             diseases.add(disease);
         }
         return diseases;

@@ -16,6 +16,8 @@ public class Disease {
 
     private int score;
 
+    private String find_in;
+
     public Disease(String name, String cui_code, String hp_code) {
         this.name = name;
         this.cui_code = cui_code;
@@ -87,6 +89,14 @@ public class Disease {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public String getFind_in() {
+        return find_in;
+    }
+
+    public void setFind_in(String find_in) {
+        this.find_in = find_in;
     }
 
     public String toString() {

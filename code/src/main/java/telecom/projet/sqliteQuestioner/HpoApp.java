@@ -77,7 +77,7 @@ public class HpoApp {
                 String[] parts = line.split(";;");
                 String name;
 
-                if (Character.isLetter(parts[0].charAt(0))) {
+                if (!Character.isLetter(parts[0].charAt(0)) && !Character.isDigit(parts[0].charAt(0))) {
                     name = parts[0].substring(parts[0].indexOf(' ') + 1);
                 }else{
                     name = parts[0];
@@ -85,9 +85,10 @@ public class HpoApp {
                 name = name.replace("\\", " ");
                 name = name.replace("/", " ");
                 Disease disease = new Disease();
-                disease.setName(name);
+                disease.setName(name.toLowerCase());
                 disease.setHp_code(symptom.getHp_code());
                 disease.setCui_code(symptom.getCui_code());
+                disease.setFind_in("HPO");
                 diseases.add(disease);
             }
 

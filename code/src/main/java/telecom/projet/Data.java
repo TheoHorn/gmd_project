@@ -11,8 +11,6 @@ import static telecom.projet.indexes.stitch.ChemicalSourcesResearcher.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 
 import telecom.projet.model.Disease;
 import telecom.projet.model.Record;
@@ -29,6 +27,7 @@ public class Data {
     public Data(String query_symptom, Boolean side_effect) throws IOException {
         this.records.clear();
         this.records = run(query_symptom, side_effect);
+        recordsCleaning(records, side_effect);
     }
 
 
@@ -61,7 +60,7 @@ public class Data {
                 }
             }
         }
-        return recordsCleaning(records, side_effect);
+        return records;
     }
 
     /**
@@ -88,7 +87,7 @@ public class Data {
                 ArrayList<Treatment> treatments = getTreatmentByATC(atc_codes);
                 for (Treatment treatment : treatments) {
 
-                    Record record = new Record(query, disease.getName().trim(), treatment.getName().trim(), "", 0);
+                    Record record = new Record(query, disease.getName().trim(), treatment.getName().trim(), disease.getFind_in(), 0);
                     records.add(record);
                 }
             }
@@ -135,6 +134,7 @@ public class Data {
             disease.setHp_code(symptom.getHp_code());
             disease.setCui_code(symptom.getCui_code());
             disease.setName(symptom.getName());
+            disease.setFind_in("SIDER");
             diseases.add(disease);
         }
         return diseases;
