@@ -1,0 +1,74 @@
+@startuml
+object Record {
+  -string: Symptom
+  -string: Problem
+  -string: Treatment
+  -string: Datasource
+  -int: Score
+}
+object HPO.obo {
+  +string: id -> HP:<int> 
+  -string: xref -> <code>:<int> 
+  -List<String>: Synonym
+  -string: Datasource
+  -int: Score
+}
+
+object HPO.sqlite {
+  +string: Sign_id #fff
+  -string: Disease_label
+}
+object SIDER.meddra_all_indication_tsv {
+  -string: STITCH_flat -> CID1<int>
+  -string: UMLS_concept_id_label
+  -string: Concept_name
+}
+object SIDER.meddra_all_se_tsv {
+  -string: STITCH_flat -> CID1<int>
+  -string: UMLS_concept_id_label
+  -int: frequency
+}
+object SIDER.meddra_all_freq_tsv {
+  -string: STITCH_flat -> CID1<int>
+  -string: UMLS_concept_id_label
+  -string: Side_effect_name
+}
+object OMIM.omim_txt {
+  +string: no
+  -string: ti
+  -string: cs
+}
+object OMIM.omim_csv {
+  -string: class_id
+  -string: preferred_label
+  -string: CUI
+}
+object DRUGBANK.drugbank_txt {
+  -string: ATC_code
+  -string: drug_name
+}
+object STITCH.chemical_sources_txt {
+  -string: STITCH_compound_id
+  -string: ATC_code
+}
+
+Record --> HPO.obo #line:orange;line.bold;text:orange : Symptom (for disease) 
+Record --> OMIM.omim_txt #line:orange;line.bold;text:orange : Symptom (for disease) 
+Record --> SIDER.meddra_all_se_tsv #line:orange;line.bold;text:orange : Symptom (for side effect) 
+
+HPO.obo <--> HPO.sqlite #line:red;line.bold;text:red : ID = Sign_id
+HPO.obo --> SIDER.meddra_all_indication_tsv #line.bold : CUI
+
+SIDER.meddra_all_indication_tsv <--> SIDER.meddra_all_freq_tsv #line:green;line.bold;text:green : CUI/CID
+SIDER.meddra_all_se_tsv <--> SIDER.meddra_all_freq_tsv #line:green;line.bold;text:green : CUI/CID
+SIDER.meddra_all_se_tsv <--> SIDER.meddra_all_indication_tsv #line:green;line.bold;text:green : CUI/CID
+SIDER.meddra_all_indication_tsv --> STITCH.chemical_sources_txt #line.bold : CID1<int>
+
+OMIM.omim_csv <--> OMIM.omim_txt #line.bold;line:blue;text:blue : class_id = no
+
+STITCH.chemical_sources_txt --> DRUGBANK.drugbank_txt #line.bold : ATC_code
+
+DRUGBANK.drugbank_txt -> Record #line.dotted;line:purple;text:purple : Treatment
+OMIM.omim_csv -> Record #line.dotted;line:purple;text:purple : Problem/source
+HPO.sqlite -> Record #line.dotted;line:purple;text:purple : Problem/source
+@enduml
